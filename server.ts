@@ -168,19 +168,11 @@ app.post('/api/auth/login', rateLimitAuth, (req, res) => {
   `).get(normalizedEmail) as any;
 
   if (!row || !verifyPassword(String(password), row.password_hash)) {
-    return res.status(401).json({ error: 'Invalid email or password credentials.' });
+    return res.status(401).json({ error: 'Invalid email or password credentials. Please check your credentials.' });
   }
 
   if (!row.is_active) {
     return res.status(403).json({ error: 'This user account has been deactivated by an Administrator.' });
-  }
-
-  // CRITICAL ROLE VERIFICATION RULE: Selected role in UI must match DB role
-  if (selectedRole && String(selectedRole).toUpperCase() !== row.role_name) {
-    return res.status(403).json({
-      error: `Role verification failed: Account "${row.email}" is assigned to role "${row.role_name}", not "${selectedRole}". Please select your authorized role.`,
-      actualRole: row.role_name,
-    });
   }
 
   const token = crypto.randomBytes(32).toString('hex');
