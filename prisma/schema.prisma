@@ -1,0 +1,546 @@
+// FactoryPulse IntelliOps — Normalized PostgreSQL Relational Schema (Prisma ORM)
+// Supports Supabase PostgreSQL / Cloud SQL in production environments.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRoleName {
+  ADMIN
+  MANAGER
+  WORKER
+  TECHNICIAN
+}
+
+enum MachineStatus {
+  OPERATING
+  IDLE
+  FAULT
+  MAINTENANCE
+}
+
+enum ProductionStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  DELAYED
+  COMPLETED
+  ON_HOLD
+}
+
+enum MaintenanceStatus {
+  REPORTED
+  ASSIGNED
+  IN_PROGRESS
+  WAITING_FOR_APPROVAL
+  COMPLETED
+}
+
+enum SeverityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model Role {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        UserRoleName @unique
+  description String
+  users       User[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  @@map("roles")
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  fullName     String    @map("full_name")
+  employeeCode String    @unique @map("employee_code")
+  roleId       String    @map("role_id") @db.Uuid
+  role         Role      @relation(fields: [roleId], references: [id])
+  departmentId String?   @map("department_id") @db.Uuid
+  department   Department? @relation("DepartmentUsers", fields: [departmentId], references: [id])
+  isActive     Boolean   @default(true) @map("is_active")
+  phone        String?
+  isDemo       Boolean   @default(false) @map("is_demo")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  workerProfile        Worker?
+  managedDepartments   Department[]         @relation("DepartmentManager")
+  notifications        Notification[]
+  auditLogs            AuditLog[]
+  assignedMaintenance  MaintenanceRequest[] @relation("AssignedTechnician")
+
+  @@index([roleId])
+  @@index([departmentId])
+  @@map("users")
+}
+
+model Factory {
+  id                String       @id @default(uuid()) @db.Uuid
+  factoryCode       String       @unique @map("factory_code")
+  name              String
+  location          String
+  contactEmail      String       @map("contact_email")
+  contactPhone      String       @map("contact_phone")
+  operatingHours    String       @map("operating_hours")
+  alertThresholdPct Int          @default(85) @map("alert_threshold_pct")
+  maintReminderDays Int          @default(14) @map("maint_reminder_days")
+  isDemo            Boolean      @default(false) @map("is_demo")
+  createdAt         DateTime     @default(now()) @map("created_at")
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+
+  departments       Department[]
+  machines          Machine[]
+  productionOrders  ProductionOrder[]
+
+  @@map("factories")
+}
+
+model Department {
+  id          String   @id @default(uuid()) @db.Uuid
+  factoryId   String   @map("factory_id") @db.Uuid
+  factory     Factory  @relation(fields: [factoryId], references: [id])
+  code        String   @unique
+  name        String
+  managerId   String?  @map("manager_id") @db.Uuid
+  manager     User?    @relation("DepartmentManager", fields: [managerId], references: [id])
+  targetEfficiencyPct Int @default(90) @map("target_efficiency_pct")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  users            User[]            @relation("DepartmentUsers")
+  workers          Worker[]
+  machines         Machine[]
+  shifts           Shift[]
+  productionOrders ProductionOrder[]
+  safetyIncidents  SafetyIncident[]
+
+  @@index([factoryId])
+  @@map("departments")
+}
+
+model Worker {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @unique @map("user_id") @db.Uuid
+  user              User     @relation(fields: [userId], references: [id])
+  departmentId      String   @map("department_id") @db.Uuid
+  department        Department @relation(fields: [departmentId], references: [id])
+  designation       String
+  experienceYears   Int      @default(1) @map("experience_years")
+  availability      String   @default("AVAILABLE") // AVAILABLE, ASSIGNED, ABSENT, ON_LEAVE
+  assignedMachineId String?  @map("assigned_machine_id") @db.Uuid
+  isDemo            Boolean  @default(false) @map("is_demo")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  skills            WorkerSkill[]
+  certifications    Certification[]
+  shiftAssignments  ShiftAssignment[]
+  attendanceRecords Attendance[]
+  productionTasks   ProductionTask[]
+  machineAssignments MachineAssignment[]
+
+  @@index([departmentId])
+  @@map("workers")
+}
+
+model Skill {
+  id          String        @id @default(uuid()) @db.Uuid
+  code        String        @unique
+  name        String
+  category    String
+  description String
+  workers     WorkerSkill[]
+
+  @@map("skills")
+}
+
+model WorkerSkill {
+  id               String @id @default(uuid()) @db.Uuid
+  workerId         String @map("worker_id") @db.Uuid
+  worker           Worker @relation(fields: [workerId], references: [id])
+  skillId          String @map("skill_id") @db.Uuid
+  skill            Skill  @relation(fields: [skillId], references: [id])
+  proficiencyLevel Int    @default(3) @map("proficiency_level") // 1-5
+
+  @@unique([workerId, skillId])
+  @@map("worker_skills")
+}
+
+model Certification {
+  id             String   @id @default(uuid()) @db.Uuid
+  workerId       String   @map("worker_id") @db.Uuid
+  worker         Worker   @relation(fields: [workerId], references: [id])
+  name           String
+  issuingBody    String   @map("issuing_body")
+  issuedDate     String   @map("issued_date")
+  expiryDate     String   @map("expiry_date")
+  status         String   @default("VALID") // VALID, EXPIRING_SOON, EXPIRED
+
+  @@index([workerId])
+  @@map("certifications")
+}
+
+model Machine {
+  id                 String        @id @default(uuid()) @db.Uuid
+  factoryId          String        @map("factory_id") @db.Uuid
+  factory            Factory       @relation(fields: [factoryId], references: [id])
+  departmentId       String        @map("department_id") @db.Uuid
+  department         Department    @relation(fields: [departmentId], references: [id])
+  machineCode        String        @unique @map("machine_code")
+  name               String
+  machineType        String        @map("machine_type")
+  status             MachineStatus @default(IDLE)
+  capacityUnitsPerHr Int           @map("capacity_units_per_hr")
+  utilizationPct     Int           @default(0) @map("utilization_pct")
+  requiredSkillCode  String        @map("required_skill_code")
+  requiredCertName   String?       @map("required_cert_name")
+  instructions       String
+  lastServicedDate   String        @map("last_serviced_date")
+  isDemo             Boolean       @default(false) @map("is_demo")
+  createdAt          DateTime      @default(now()) @map("created_at")
+
+  assignments         MachineAssignment[]
+  statusLogs          MachineStatusLog[]
+  productionOrders    ProductionOrder[]
+  productionTasks     ProductionTask[]
+  maintenanceRequests MaintenanceRequest[]
+  maintenanceSchedules MaintenanceSchedule[]
+
+  @@index([departmentId])
+  @@index([status])
+  @@map("machines")
+}
+
+model Shift {
+  id              String   @id @default(uuid()) @db.Uuid
+  departmentId    String   @map("department_id") @db.Uuid
+  department      Department @relation(fields: [departmentId], references: [id])
+  name            String   // Morning, Afternoon, Night
+  shiftDate       String   @map("shift_date")
+  startTime       String   @map("start_time")
+  endTime         String   @map("end_time")
+  requiredWorkers Int      @map("required_workers")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  assignments     ShiftAssignment[]
+
+  @@index([shiftDate, departmentId])
+  @@map("shifts")
+}
+
+model ShiftAssignment {
+  id        String   @id @default(uuid()) @db.Uuid
+  shiftId   String   @map("shift_id") @db.Uuid
+  shift     Shift    @relation(fields: [shiftId], references: [id])
+  workerId  String   @map("worker_id") @db.Uuid
+  worker    Worker   @relation(fields: [workerId], references: [id])
+  status    String   @default("SCHEDULED")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([shiftId, workerId])
+  @@map("shift_assignments")
+}
+
+model Attendance {
+  id             String   @id @default(uuid()) @db.Uuid
+  workerId       String   @map("worker_id") @db.Uuid
+  worker         Worker   @relation(fields: [workerId], references: [id])
+  attendanceDate String   @map("attendance_date")
+  checkInTime    String?  @map("check_in_time")
+  checkOutTime   String?  @map("check_out_time")
+  hoursWorked    Float    @default(0) @map("hours_worked")
+  status         String   @default("PRESENT") // PRESENT, CHECKED_OUT, ABSENT, LATE
+
+  @@unique([workerId, attendanceDate])
+  @@map("attendance")
+}
+
+model ProductionOrder {
+  id             String           @id @default(uuid()) @db.Uuid
+  orderCode      String           @unique @map("order_code")
+  factoryId      String           @map("factory_id") @db.Uuid
+  factory        Factory          @relation(fields: [factoryId], references: [id])
+  departmentId   String           @map("department_id") @db.Uuid
+  department     Department       @relation(fields: [departmentId], references: [id])
+  machineId      String?          @map("machine_id") @db.Uuid
+  machine        Machine?         @relation(fields: [machineId], references: [id])
+  productName    String           @map("product_name")
+  targetQty      Int              @map("target_qty")
+  producedQty    Int              @default(0) @map("produced_qty")
+  downtimeMins   Int              @default(0) @map("downtime_mins")
+  priority       SeverityLevel    @default(MEDIUM)
+  status         ProductionStatus @default(NOT_STARTED)
+  deadline       String
+  isDemo         Boolean          @default(false) @map("is_demo")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  tasks          ProductionTask[]
+  logs           ProductionLog[]
+
+  @@index([status])
+  @@index([departmentId])
+  @@map("production_orders")
+}
+
+model ProductionTask {
+  id          String          @id @default(uuid()) @db.Uuid
+  orderId     String          @map("order_id") @db.Uuid
+  order       ProductionOrder @relation(fields: [orderId], references: [id])
+  workerId    String          @map("worker_id") @db.Uuid
+  worker      Worker          @relation(fields: [workerId], references: [id])
+  machineId   String          @map("machine_id") @db.Uuid
+  machine     Machine         @relation(fields: [machineId], references: [id])
+  title       String
+  targetQty   Int             @map("target_qty")
+  completedQty Int            @default(0) @map("completed_qty")
+  status      String          @default("IN_PROGRESS")
+  deadline    String
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  @@index([workerId])
+  @@index([orderId])
+  @@map("production_tasks")
+}
+
+model ProductionLog {
+  id           String          @id @default(uuid()) @db.Uuid
+  orderId      String          @map("order_id") @db.Uuid
+  order        ProductionOrder @relation(fields: [orderId], references: [id])
+  recordedById String          @map("recorded_by_id") @db.Uuid
+  outputDelta  Int             @map("output_delta")
+  downtimeMins Int             @default(0) @map("downtime_mins")
+  notes        String?
+  createdAt    DateTime        @default(now()) @map("created_at")
+
+  @@map("production_logs")
+}
+
+model MachineAssignment {
+  id         String   @id @default(uuid()) @db.Uuid
+  machineId  String   @map("machine_id") @db.Uuid
+  machine    Machine  @relation(fields: [machineId], references: [id])
+  workerId   String   @map("worker_id") @db.Uuid
+  worker     Worker   @relation(fields: [workerId], references: [id])
+  orderId    String?  @map("order_id") @db.Uuid
+  active     Boolean  @default(true)
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  @@map("machine_assignments")
+}
+
+model MachineStatusLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  machineId      String   @map("machine_id") @db.Uuid
+  machine        Machine  @relation(fields: [machineId], references: [id])
+  previousStatus String   @map("previous_status")
+  newStatus      String   @map("new_status")
+  changedById    String   @map("changed_by_id") @db.Uuid
+  reason         String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([machineId])
+  @@map("machine_status_logs")
+}
+
+model SafetyIncident {
+  id             String        @id @default(uuid()) @db.Uuid
+  incidentCode   String        @unique @map("incident_code")
+  departmentId   String        @map("department_id") @db.Uuid
+  department     Department    @relation(fields: [departmentId], references: [id])
+  reportedById   String        @map("reported_by_id") @db.Uuid
+  incidentType   String        @map("incident_type") // INCIDENT, HAZARD
+  category       String
+  severity       SeverityLevel
+  description    String
+  status         String        @default("OPEN") // OPEN, ACTION_ASSIGNED, RESOLVED
+  createdAt      DateTime      @default(now()) @map("created_at")
+  resolvedAt     DateTime?     @map("resolved_at")
+
+  actions        SafetyAction[]
+
+  @@index([departmentId, status])
+  @@map("safety_incidents")
+}
+
+model SafetyAction {
+  id            String         @id @default(uuid()) @db.Uuid
+  incidentId    String         @map("incident_id") @db.Uuid
+  incident      SafetyIncident @relation(fields: [incidentId], references: [id])
+  assignedToId  String         @map("assigned_to_id") @db.Uuid
+  actionPlan    String         @map("action_plan")
+  deadline      String
+  status        String         @default("PENDING") // PENDING, COMPLETED
+  completedAt   DateTime?      @map("completed_at")
+
+  @@map("safety_actions")
+}
+
+model MaintenanceRequest {
+  id                 String            @id @default(uuid()) @db.Uuid
+  requestCode        String            @unique @map("request_code")
+  machineId          String            @map("machine_id") @db.Uuid
+  machine            Machine           @relation(fields: [machineId], references: [id])
+  reportedById       String            @map("reported_by_id") @db.Uuid
+  assignedTechId     String?           @map("assigned_tech_id") @db.Uuid
+  assignedTech       User?             @relation("AssignedTechnician", fields: [assignedTechId], references: [id])
+  faultCategory      String            @map("fault_category")
+  priority           SeverityLevel
+  description        String
+  diagnosis          String?
+  repairNotes        String?           @map("repair_notes")
+  partsUsed          String?           @map("parts_used")
+  status             MaintenanceStatus @default(REPORTED)
+  scheduledDate      String?           @map("scheduled_date")
+  downtimeMinutes    Int               @default(0) @map("downtime_minutes")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  completedAt        DateTime?         @map("completed_at")
+
+  logs               MaintenanceLog[]
+
+  @@index([machineId, status])
+  @@map("maintenance_requests")
+}
+
+model MaintenanceSchedule {
+  id            String   @id @default(uuid()) @db.Uuid
+  machineId     String   @map("machine_id") @db.Uuid
+  machine       Machine  @relation(fields: [machineId], references: [id])
+  technicianId  String   @map("technician_id") @db.Uuid
+  title         String
+  scheduledDate String   @map("scheduled_date")
+  durationHrs   Float    @map("duration_hrs")
+  status        String   @default("SCHEDULED")
+
+  @@map("maintenance_schedules")
+}
+
+model MaintenanceLog {
+  id           String             @id @default(uuid()) @db.Uuid
+  requestId    String             @map("request_id") @db.Uuid
+  request      MaintenanceRequest @relation(fields: [requestId], references: [id])
+  actorId      String             @map("actor_id") @db.Uuid
+  statusFrom   String             @map("status_from")
+  statusTo     String             @map("status_to")
+  notes        String
+  createdAt    DateTime           @default(now()) @map("created_at")
+
+  @@map("maintenance_logs")
+}
+
+model Alert {
+  id           String        @id @default(uuid()) @db.Uuid
+  severity     SeverityLevel
+  category     String
+  title        String
+  message      String
+  entityId     String?       @map("entity_id")
+  acknowledged Boolean       @default(false)
+  createdAt    DateTime      @default(now()) @map("created_at")
+
+  @@map("alerts")
+}
+
+model Notification {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  category    String   // FAULT, TASK, SHIFT, SAFETY, MAINTENANCE, RECOVERY, SYSTEM
+  title       String
+  message     String
+  relatedLink String?  @map("related_link")
+  isRead      Boolean  @default(false) @map("is_read")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model SimulationScenario {
+  id             String   @id @default(uuid()) @db.Uuid
+  createdById    String   @map("created_by_id") @db.Uuid
+  scenarioType   String   @map("scenario_type")
+  name           String
+  parametersJson String   @map("parameters_json")
+  assumptions    String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  results        SimulationResult[]
+
+  @@map("simulation_scenarios")
+}
+
+model SimulationResult {
+  id                String             @id @default(uuid()) @db.Uuid
+  scenarioId        String             @map("scenario_id") @db.Uuid
+  scenario          SimulationScenario @relation(fields: [scenarioId], references: [id])
+  metricsBeforeJson String             @map("metrics_before_json")
+  metricsAfterJson  String             @map("metrics_after_json")
+  recommendationsJson String           @map("recommendations_json")
+  estimatedDelayHrs Float              @map("estimated_delay_hrs")
+  convertedPlanId   String?            @map("converted_plan_id")
+  createdAt         DateTime           @default(now()) @map("created_at")
+
+  @@map("simulation_results")
+}
+
+model RecoveryPlan {
+  id                String   @id @default(uuid()) @db.Uuid
+  planCode          String   @unique @map("plan_code")
+  eventType         String   @map("event_type")
+  triggerEntityId   String   @map("trigger_entity_id")
+  summary           String
+  status            String   @default("PROPOSED") // PROPOSED, APPROVED, MODIFIED, REJECTED, STALE
+  weightsJson       String   @map("weights_json")
+  beforeMetricsJson String   @map("before_metrics_json")
+  afterMetricsJson  String   @map("after_metrics_json")
+  approvedById      String?  @map("approved_by_id") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at")
+  decidedAt         DateTime? @map("decided_at")
+
+  recommendations   RecoveryRecommendation[]
+
+  @@map("recovery_plans")
+}
+
+model RecoveryRecommendation {
+  id                    String       @id @default(uuid()) @db.Uuid
+  planId                String       @map("plan_id") @db.Uuid
+  plan                  RecoveryPlan @relation(fields: [planId], references: [id])
+  orderId               String?      @map("order_id")
+  sourceMachineId       String?      @map("source_machine_id")
+  targetMachineId       String       @map("target_machine_id")
+  workerId              String       @map("worker_id")
+  skillScore            Float        @map("skill_score")
+  availabilityScore     Float        @map("availability_score")
+  machineCompatScore    Float        @map("machine_compat_score")
+  priorityScore         Float        @map("priority_score")
+  efficiencyScore       Float        @map("efficiency_score")
+  totalNormalizedScore  Float        @map("total_normalized_score")
+  rationale             String
+  selected              Boolean      @default(true)
+
+  @@map("recovery_recommendations")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String   @map("entity_id")
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("audit_logs")
+}

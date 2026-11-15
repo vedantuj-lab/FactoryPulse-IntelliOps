@@ -1,0 +1,2186 @@
+MASTER DEVELOPMENT PROMPT
+FACTORYPULSE INTELLIOPS
+Complete Industrial Operations Management & Intelligent Factory Recovery Platform
+
+Act as a senior full-stack software architect, enterprise SaaS product designer, UI/UX specialist, database architect, backend engineer, frontend developer, security engineer and industrial operations management specialist.
+
+Your task is to DESIGN, DEVELOP AND IMPLEMENT a complete, production-oriented, fully functional, software-based industrial operations management platform called:
+
+FACTORYPULSE INTELLIOPS
+Tagline:
+
+"One Factory. One Connected Intelligence. Complete Operational Control."
+
+This is a complete web-based industrial management platform designed to connect factory workforce, machine operations, production monitoring, shift planning, workplace safety and maintenance management.
+
+The application must help factory managers understand operational conditions, identify inefficiencies, optimize workforce allocation, respond to machine failures and monitor production performance.
+
+This project is being developed for the NavUtkarsh × Leo Hackathon 2026 under Problem Statement 04 – FactoryPulse.
+
+==================================================
+
+1. NON-NEGOTIABLE PROJECT REQUIREMENTS
+
+==================================================
+
+Follow these requirements throughout development.
+
+Build a complete software-only web application.
+Do not require any hardware.
+Do not require IoT devices.
+Do not require Arduino, Raspberry Pi, microcontrollers or sensors.
+Do not require physical machine connectivity.
+Do not require RFID, GPS, CCTV or external industrial equipment.
+Do not introduce unnecessary LLM, RAG or machine learning dependencies.
+Use transparent rule-based algorithms and operational analytics.
+Simulated operational data is permitted, but clearly identify simulated information.
+Every major feature must be functional.
+All four login dashboards must use the same connected backend and database.
+Changes made by one login must appear in the relevant dashboards of other authorized users.
+Implement proper role-based access control.
+Do not create duplicate features across different login dashboards.
+Do not create unnecessary modules that complicate the application.
+Do not create static dashboards that only display hardcoded information.
+Do not leave buttons, forms, filters or navigation elements non-functional.
+Do not use placeholder pages for important features.
+Do not create fake AI predictions.
+Do not claim that the software receives actual machine sensor data.
+
+The application must follow this operational workflow:
+
+FACTORY SETUP
+→ WORKFORCE REGISTRATION
+→ SHIFT PLANNING
+→ RESOURCE ALLOCATION
+→ PRODUCTION MANAGEMENT
+→ OPERATIONAL MONITORING
+→ SAFETY MANAGEMENT
+→ FAULT REPORTING
+→ MAINTENANCE
+→ INTELLIGENT RECOVERY
+→ PERFORMANCE ANALYTICS
+
+The application should be built as a real interconnected product, not a presentation-only prototype.
+
+==================================================
+
+2. PROJECT IDENTITY AND BRANDING
+
+==================================================
+
+Application Name: FactoryPulse IntelliOps
+
+Product Category: Industrial Operations Management SaaS
+
+Target Users:
+
+Factory administrators.
+Factory managers.
+Industrial workers.
+Maintenance technicians.
+
+Brand Personality:
+
+Professional.
+Industrial.
+Intelligent.
+Reliable.
+Modern.
+Premium.
+Efficient.
+Enterprise-oriented.
+
+Create a professional logo representing:
+
+Industrial operations.
+Connected resources.
+Manufacturing.
+Operational intelligence.
+
+Use the FactoryPulse name consistently throughout:
+
+Landing page.
+Navigation.
+Login.
+Dashboards.
+Reports.
+Notifications.
+Loading screens.
+Application footer.
+
+Do not randomly change the product name.
+
+==================================================
+
+3. COMPLETE WEBSITE STRUCTURE
+
+==================================================
+
+The website must follow this exact overall navigation structure:
+
+Landing Page
+Login / Authentication
+Role-Based Dashboard
+Individual Role Features
+Notifications
+Profile and Account Settings
+
+The primary user journey must be:
+
+LANDING PAGE
+|
+v
+GET STARTED / LOGIN
+|
+v
+AUTHENTICATION
+|
+v
+ROLE VERIFICATION
+|
+v
+ROLE-BASED REDIRECTION
+|
++-------------------------------+
+| | |
+v v v
+ADMIN MANAGER WORKER
+DASHBOARD DASHBOARD DASHBOARD
+|
++-------------------------------+
+|
+v
+TECHNICIAN DASHBOARD
+
+The user must be redirected to the correct dashboard according to their authenticated role.
+
+Do not redirect every user to the same dashboard.
+
+==================================================
+
+4. LANDING PAGE – COMPLETE DESIGN AND FUNCTIONALITY
+
+==================================================
+
+Create a premium, realistic, enterprise-grade industrial SaaS landing page.
+
+The landing page should immediately communicate that FactoryPulse is a professional industrial operations management platform.
+
+Do not make it look like a generic AI-generated website.
+
+4.1 Navigation Bar
+
+Include:
+
+FactoryPulse logo.
+Home.
+Platform.
+Features.
+How It Works.
+Benefits.
+About.
+Contact.
+Login button.
+Get Started button.
+
+Navigation requirements:
+
+Sticky navigation.
+Smooth scrolling.
+Active navigation states.
+Responsive mobile navigation.
+Functional links.
+Professional hover effects.
+4.2 Hero Section
+
+Create a visually impressive industrial hero section.
+
+Headline:
+
+"Transform Factory Operations Into Intelligent, Connected Workflows."
+
+Supporting text:
+
+"Manage your workforce, machines, production, safety and maintenance through one connected industrial operations platform."
+
+Primary CTA:
+"Explore Platform"
+
+Secondary CTA:
+"Get Started"
+
+Visual direction:
+
+Use a realistic manufacturing facility as the background or primary visual.
+
+Show:
+
+Modern manufacturing floor.
+Industrial machines.
+Production environment.
+Professional factory atmosphere.
+Operational monitoring interface.
+
+Use a dark industrial overlay to maintain text readability.
+
+Add a professional dashboard preview on the right side or as a layered visual.
+
+Include realistic animated KPI cards:
+
+Active Workforce.
+Operating Machines.
+Production Achievement.
+Pending Maintenance.
+
+These landing-page values must come from the application database or clearly identified demonstration data.
+
+4.3 Problem Section
+
+Heading:
+
+"Disconnected Factory Operations Create Unnecessary Complexity."
+
+Explain five problems:
+
+Workforce allocation inefficiency.
+Unplanned machine downtime.
+Poor production visibility.
+Delayed maintenance responses.
+Disconnected safety reporting.
+
+Use realistic industrial photographs or illustrations.
+
+4.4 Solution Section
+
+Heading:
+
+"One Connected Platform. Complete Factory Visibility."
+
+Show six connected capabilities:
+
+Workforce Management.
+Shift Planning.
+Machine Management.
+Production Monitoring.
+Safety Management.
+Maintenance Management.
+
+Use a connected visual workflow rather than unrelated feature cards.
+
+4.5 Intelligent Recovery Section
+
+This must be one of the most visually prominent sections.
+
+Heading:
+
+"Recover Faster. Make Smarter Operational Decisions."
+
+Explain how the Factory Recovery Engine works.
+
+Show a visual sequence:
+
+Machine Fault
+→ Impact Identification
+→ Resource Evaluation
+→ Alternative Allocation
+→ Manager Approval
+→ Production Recovery.
+
+Include a small interactive demonstration of a simulated machine fault.
+
+When the user activates the demonstration, show how the system identifies the affected resources and displays alternative recovery options.
+
+Clearly label this as a simulated example.
+
+4.6 How It Works
+
+Show:
+
+Register factory resources.
+Manage workforce and shifts.
+Plan production.
+Monitor operations.
+Identify operational problems.
+Generate recovery recommendations.
+Review factory performance.
+4.7 Platform Features
+
+Display the eight main modules:
+
+Factory Overview.
+Workforce Management.
+Shift Planning.
+Machine Management.
+Production Management.
+Safety Management.
+Maintenance Management.
+Intelligent Recovery Engine.
+
+Each card must have:
+
+Distinct icon.
+Appropriate image or visual.
+Short description.
+Learn More interaction.
+4.8 Benefits Section
+
+Highlight:
+
+Better workforce utilization.
+Improved production visibility.
+Faster fault response.
+Organized maintenance.
+Improved operational coordination.
+Data-driven management decisions.
+
+Do not use unsupported percentage-based improvement claims.
+
+4.9 Final CTA
+
+Heading:
+
+"Bring Your Entire Factory Operation Together."
+
+Button:
+"Get Started with FactoryPulse"
+
+4.10 Footer
+
+Include:
+
+Product logo.
+Product description.
+Platform links.
+Features.
+Contact information.
+Privacy Policy.
+Terms and Conditions.
+Copyright.
+
+All links must have meaningful destinations.
+
+==================================================
+
+5. LOGIN AND AUTHENTICATION SYSTEM
+
+==================================================
+
+Create a professional authentication experience.
+
+The login page must be visually different from the landing page while maintaining the same brand identity.
+
+5.1 Login Layout
+
+Use a two-column layout.
+
+LEFT SIDE:
+
+Industrial factory background image.
+FactoryPulse branding.
+Short product statement.
+Premium dark overlay.
+Subtle animations.
+
+RIGHT SIDE:
+
+Login form.
+Email field.
+Password field.
+Show/hide password.
+Remember me.
+Forgot password.
+Sign In button.
+
+Include form validation and useful error messages.
+
+5.2 Role Selection
+
+The application must support four roles:
+
+Administrator.
+Factory Manager.
+Worker.
+Maintenance Technician.
+
+Provide an appropriate role-selection interface.
+
+However, role selection must not grant permissions.
+
+IMPORTANT AUTHENTICATION RULE:
+
+The actual role must be retrieved from the authenticated user's database record.
+
+The system must verify the role on the backend.
+
+A user must not be able to access another role's dashboard simply by changing a URL or selecting another role.
+
+If the selected role does not match the authenticated account's assigned role, show an appropriate authorization error.
+
+5.3 Login Redirection
+
+After successful authentication:
+
+Administrator → /admin/dashboard
+
+Factory Manager → /manager/dashboard
+
+Worker → /worker/dashboard
+
+Maintenance Technician → /technician/dashboard
+
+Each role must have a separate dashboard layout and feature permissions.
+
+5.4 Authentication Functionality
+
+Implement:
+
+Secure login.
+Logout.
+Password reset.
+Session persistence.
+Protected routes.
+Role-based permissions.
+Invalid login handling.
+Unauthorized access handling.
+Session expiration.
+Profile management.
+
+Do not create an insecure frontend-only authentication system.
+
+Use Supabase Auth or an equivalent secure authentication implementation.
+
+Never expose service-role keys or database credentials in frontend code.
+
+5.5 Initial Demonstration Accounts
+
+Create a controlled development seed process for four demonstration accounts:
+
+admin@factorypulse.demo
+manager@factorypulse.demo
+worker@factorypulse.demo
+technician@factorypulse.demo
+
+Use a documented development-only password setup process.
+
+Do not hardcode production credentials into the application.
+
+==================================================
+
+6. ROLE 1 – ADMINISTRATOR DASHBOARD
+
+==================================================
+
+ROUTE:
+
+/admin/dashboard
+
+The Administrator manages the complete factory configuration and user administration.
+
+The administrator dashboard should use an industrial management design with a dark graphite foundation and orange accents.
+
+6.1 Administrator Dashboard
+
+Display:
+
+Total Factories.
+Total Departments.
+Total Users.
+Total Workers.
+Total Managers.
+Total Technicians.
+Registered Machines.
+Active Accounts.
+System Notifications.
+
+Include:
+
+User activity chart.
+Department distribution.
+User registration trend.
+Machine registration statistics.
+Recent administrative activities.
+
+All statistics must come from database records.
+
+6.2 Factory Management
+
+Features:
+
+Register factory.
+Edit factory details.
+View factory details.
+Manage departments.
+Set factory operating hours.
+Configure operational settings.
+
+Factory information:
+
+Factory name.
+Factory ID.
+Location.
+Contact details.
+Department information.
+Operating schedule.
+6.3 User Management
+
+Features:
+
+Create user accounts.
+View users.
+Edit user information.
+Assign roles.
+Activate accounts.
+Deactivate accounts.
+Reset access through secure authentication workflows.
+
+Provide search, filters and pagination.
+
+6.4 Department Management
+
+Features:
+
+Create departments.
+Edit departments.
+Assign department managers.
+View department workers.
+View department machines.
+Monitor department performance.
+6.5 Machine Registry
+
+Features:
+
+Register machines.
+Edit machine information.
+View machine records.
+Assign machines to departments.
+Configure machine capacities.
+View machine histories.
+6.6 Skills and Certifications Management
+
+Features:
+
+Add worker skills.
+Add certifications.
+Manage certification requirements.
+View worker qualifications.
+6.7 System Configuration
+
+Features:
+
+Configure operational thresholds.
+Configure production alert thresholds.
+Configure maintenance reminders.
+Configure notification preferences.
+Manage basic factory settings.
+6.8 Audit Logs
+
+Track important actions:
+
+User login.
+User creation.
+Role changes.
+Machine registration.
+Worker allocation.
+Production changes.
+Safety reports.
+Maintenance actions.
+Recovery approvals.
+
+Each audit record must include:
+
+User.
+Action.
+Timestamp.
+Relevant record ID.
+Description.
+
+The administrator must not automatically have permission to modify every operational record without an appropriate workflow.
+
+==================================================
+
+7. ROLE 2 – FACTORY MANAGER DASHBOARD
+
+==================================================
+
+ROUTE:
+
+/manager/dashboard
+
+This is the main operational dashboard.
+
+Use a premium industrial analytics design with graphite, orange and teal accents.
+
+The manager is responsible for day-to-day factory operations.
+
+7.1 Manager Overview Dashboard
+
+Display:
+
+WORKFORCE:
+
+Total Workers.
+Present Workers.
+Available Workers.
+Assigned Workers.
+Absent Workers.
+
+MACHINES:
+
+Total Machines.
+Operating.
+Idle.
+Fault.
+Under Maintenance.
+
+PRODUCTION:
+
+Active Orders.
+Completed Orders.
+Delayed Orders.
+Production Achievement.
+
+SAFETY:
+
+Active Incidents.
+High-Priority Incidents.
+Pending Corrective Actions.
+
+MAINTENANCE:
+
+Pending Requests.
+Scheduled Maintenance.
+Overdue Maintenance.
+
+Include:
+
+Production trend charts.
+Machine utilization charts.
+Workforce availability charts.
+Department performance.
+Recent operational activities.
+Critical alerts.
+7.2 Workforce Management
+
+Manager permissions:
+
+View workers.
+Search workers.
+Filter by department.
+Filter by skills.
+Check availability.
+View certifications.
+Review attendance.
+Assign workers to production tasks.
+
+Do not allow the manager to change authentication roles.
+
+7.3 Shift Planning
+
+Features:
+
+Create shifts.
+Edit shifts.
+Assign workers.
+View shift calendar.
+Monitor staffing requirements.
+Detect scheduling conflicts.
+Check worker availability.
+Generate allocation recommendations.
+
+Support:
+
+Morning.
+Afternoon.
+Night.
+
+Prevent overlapping worker assignments.
+
+7.4 Machine Management
+
+Features:
+
+View machine registry.
+View machine status.
+Change machine status through authorized operational workflows.
+View assigned workers.
+View current production orders.
+View machine utilization.
+View fault history.
+View maintenance history.
+
+Machine statuses:
+
+Operating.
+Idle.
+Fault.
+Maintenance.
+
+All status changes must create history records.
+
+7.5 Production Management
+
+Features:
+
+Create production orders.
+Edit production orders.
+Assign machines.
+Assign workers.
+Set production targets.
+Set deadlines.
+Set priority.
+Monitor production progress.
+Record production output.
+Record downtime.
+Complete production orders.
+Place orders on hold.
+
+Production statuses:
+
+Not Started.
+In Progress.
+Delayed.
+Completed.
+On Hold.
+
+Display production performance charts.
+
+7.6 Safety Management
+
+Features:
+
+View safety incidents.
+View reported hazards.
+Assign corrective actions.
+Assign responsible persons.
+Set deadlines.
+Track resolution.
+View incident history.
+Monitor department safety performance.
+7.7 Maintenance Management
+
+Features:
+
+View maintenance requests.
+Review machine faults.
+Approve maintenance requests.
+Assign technicians.
+Schedule maintenance.
+Monitor maintenance progress.
+Review completed maintenance.
+View machine service history.
+7.8 Factory Analytics
+
+Include:
+
+Production performance.
+Machine utilization.
+Workforce utilization.
+Downtime analysis.
+Maintenance statistics.
+Safety incident trends.
+Department performance.
+
+Allow date filtering and CSV report export.
+
+==================================================
+
+8. ROLE 3 – WORKER DASHBOARD
+
+==================================================
+
+ROUTE:
+
+/worker/dashboard
+
+Create a separate worker-focused interface.
+
+The worker dashboard must be simpler than the manager dashboard.
+
+Do not display administrator controls or manager-only features.
+
+Use a warm industrial theme combining graphite, purple and pink accents.
+
+8.1 Worker Dashboard
+
+Display:
+
+Welcome message.
+Worker name.
+Employee ID.
+Current shift.
+Department.
+Assigned machine.
+Assigned production task.
+Attendance status.
+Task progress.
+Notifications.
+8.2 My Profile
+
+Display:
+
+Personal information.
+Employee ID.
+Department.
+Designation.
+Skills.
+Certifications.
+Experience.
+
+Workers can edit only permitted personal fields.
+
+8.3 Attendance
+
+Features:
+
+Check-in.
+Check-out.
+View attendance history.
+View working hours.
+View attendance status.
+
+Attendance actions must be validated by the backend.
+
+Prevent duplicate check-ins and invalid check-outs.
+
+8.4 My Shifts
+
+Features:
+
+Current shift.
+Upcoming shifts.
+Shift timing.
+Assigned department.
+Shift history.
+
+Workers can view assignments but cannot modify their own shift allocation.
+
+8.5 My Production Tasks
+
+Features:
+
+View assigned tasks.
+View production order.
+View assigned machine.
+View target quantity.
+View task deadline.
+View task status.
+Submit task progress.
+Mark eligible tasks as completed.
+
+Managers must be able to see the worker's submitted progress.
+
+8.6 Machine Information
+
+Display:
+
+Assigned machine.
+Machine status.
+Machine instructions.
+Assigned production order.
+
+Workers must not have unrestricted machine administration permissions.
+
+8.7 Report Machine Fault
+
+Features:
+
+Select machine.
+Select fault category.
+Enter description.
+Set severity.
+Submit fault report.
+
+After submission:
+
+Store the fault report.
+Create a notification.
+Update the relevant machine status through the authorized fault-reporting workflow.
+Notify the manager.
+Notify maintenance personnel.
+Make the event available to the recovery engine.
+8.8 Safety Incident Reporting
+
+Features:
+
+Report workplace incident.
+Report hazard.
+Add description.
+Select category.
+Select severity.
+View submitted reports.
+View report status.
+
+Workers can view their own reports and authorized related updates.
+
+8.9 Notifications
+
+Display:
+
+Shift assignments.
+Task assignments.
+Machine fault updates.
+Safety updates.
+Manager announcements.
+
+==================================================
+
+9. ROLE 4 – MAINTENANCE TECHNICIAN DASHBOARD
+
+==================================================
+
+ROUTE:
+
+/technician/dashboard
+
+Create a dedicated maintenance operations interface.
+
+Use graphite, green and emerald accents.
+
+The technician should not see irrelevant administrator and workforce management controls.
+
+9.1 Technician Dashboard
+
+Display:
+
+Assigned Maintenance Requests.
+High-Priority Faults.
+Machines Under Maintenance.
+Upcoming Maintenance.
+Overdue Maintenance.
+Completed Maintenance.
+
+Include:
+
+Maintenance workload chart.
+Machine fault distribution.
+Maintenance completion trend.
+Recent maintenance activities.
+9.2 Assigned Maintenance Requests
+
+Features:
+
+View assigned requests.
+View machine details.
+View fault descriptions.
+View fault priority.
+View reported date.
+View responsible manager.
+9.3 Maintenance Workflow
+
+Statuses:
+
+Reported.
+Assigned.
+In Progress.
+Waiting for Approval.
+Completed.
+
+Technician actions:
+
+Accept assignment.
+Start maintenance.
+Add diagnosis.
+Add repair notes.
+Update status.
+Record parts or service details.
+Submit completion report.
+9.4 Maintenance Scheduling
+
+Features:
+
+View maintenance calendar.
+View upcoming tasks.
+View assigned machines.
+View deadlines.
+Update maintenance progress.
+9.5 Machine Service History
+
+Display:
+
+Machine ID.
+Machine name.
+Previous faults.
+Previous maintenance.
+Service dates.
+Repair notes.
+Downtime records.
+9.6 Maintenance Completion
+
+When a technician completes a maintenance request:
+
+Save the completion record.
+Update maintenance status.
+Notify the manager.
+Update machine availability after authorized confirmation.
+Update machine history.
+Update relevant analytics.
+Make the updated machine status available to the recovery engine.
+
+==================================================
+
+10. MOST IMPORTANT FEATURE – INTELLIGENT FACTORY RECOVERY ENGINE
+
+==================================================
+
+This is the main innovation of FactoryPulse IntelliOps.
+
+Do not implement this as a static page.
+
+Build an actual working decision-support engine.
+
+ROUTE:
+
+/manager/recovery-engine
+
+Purpose:
+
+Identify the operational consequences of a machine fault, worker absence or production shortage and recommend suitable recovery options.
+
+The system must use real database records.
+
+10.1 Problem Detection
+
+Support these events:
+
+Machine fault.
+Worker absence.
+Production shortage.
+Machine maintenance.
+Sudden increase in production demand.
+
+Events can originate from:
+
+Worker reports.
+Manager actions.
+Maintenance reports.
+Simulated operational scenarios.
+10.2 Impact Identification
+
+When a machine fault occurs, identify:
+
+Affected machine.
+Assigned workers.
+Production orders.
+Current production capacity.
+Machine compatibility requirements.
+Available alternative machines.
+Available qualified workers.
+10.3 Resource Allocation Engine
+
+Implement a rule-based resource allocation algorithm.
+
+Hard constraints:
+
+Worker must be available.
+Worker must possess the required skills.
+Worker must have required certifications.
+Machine must be operational.
+Machine must support the production task.
+Worker must not have conflicting assignments.
+Shift requirements must be respected.
+
+After enforcing hard constraints, calculate a recommendation score.
+
+Suggested weights:
+
+Skill compatibility: 35%.
+Worker availability: 25%.
+Machine compatibility: 20%.
+Production priority: 10%.
+Assignment efficiency: 10%.
+
+Normalize scores to a 0–100 scale.
+
+These weights should be configurable.
+
+Never assign an ineligible worker simply because that worker has a high score.
+
+10.4 Recovery Recommendation Interface
+
+Display:
+
+Incident summary.
+Affected machine.
+Affected workers.
+Affected production orders.
+Alternative machines.
+Eligible workers.
+Recommended assignments.
+Recommendation scores.
+Estimated production impact.
+
+Provide three actions:
+
+Approve.
+Modify.
+Reject.
+
+The manager must always retain final approval authority.
+
+10.5 Recovery Execution
+
+After manager approval:
+
+Validate the recovery plan again.
+Check current worker availability.
+Check machine status.
+Check shift conflicts.
+Update assignments in a database transaction.
+Update production assignments.
+Create an audit record.
+Generate notifications.
+Refresh relevant dashboards.
+Save the recovery history.
+
+If any required resource becomes unavailable before approval, reject the stale plan and recalculate it.
+
+10.6 Recovery Comparison
+
+Display a before-and-after comparison.
+
+Metrics:
+
+Active machines.
+Available workers.
+Assigned workers.
+Production capacity.
+Estimated production delay.
+Resource utilization.
+
+Use calculated values from the actual simulation.
+
+Clearly distinguish measured historical information from estimated scenario outputs.
+
+==================================================
+
+11. FACTORY SCENARIO SIMULATOR
+
+==================================================
+
+ROUTE:
+
+/manager/scenario-simulator
+
+Create an interactive simulation environment.
+
+Managers should be able to test operational situations without changing the actual factory records.
+
+Scenario 1: Machine Failure
+
+User selects:
+
+Machine.
+Failure type.
+Estimated downtime.
+
+System calculates:
+
+Affected workers.
+Affected production.
+Alternative machines.
+Possible resource allocations.
+Estimated delay.
+Scenario 2: Worker Absence
+
+User selects an unavailable worker.
+
+System identifies:
+
+Affected shifts.
+Affected tasks.
+Replacement workers.
+Skill compatibility.
+Scenario 3: Production Demand Increase
+
+User enters a higher production target.
+
+System calculates:
+
+Required capacity.
+Available machine capacity.
+Available workforce.
+Resource shortages.
+Scenario 4: Scheduled Maintenance
+
+User selects a machine and maintenance duration.
+
+System calculates:
+
+Operational impact.
+Affected production orders.
+Alternative capacity.
+Scenario 5: Production Delay
+
+User selects a delayed order.
+
+System identifies:
+
+Current production progress.
+Remaining quantity.
+Available resources.
+Possible recovery options.
+Simulation Rules
+Simulations must use a snapshot of current operational data.
+Simulations must not modify real operational records.
+Display simulation assumptions.
+Show estimated outcomes.
+Allow managers to compare scenarios.
+Allow a manager to convert an approved simulation into a real recovery proposal.
+Save simulation history.
+
+==================================================
+
+12. SHARED NOTIFICATION SYSTEM
+
+==================================================
+
+Build a centralized notification system.
+
+Notifications must be generated from actual application events.
+
+Examples:
+
+WORKER REPORTS MACHINE FAULT:
+
+Manager receives notification.
+Maintenance technician receives notification.
+Relevant operational dashboard updates.
+
+MANAGER ASSIGNS WORKER:
+
+Worker receives notification.
+
+MANAGER CREATES PRODUCTION ORDER:
+
+Assigned workers receive task notifications.
+
+TECHNICIAN COMPLETES MAINTENANCE:
+
+Manager receives completion notification.
+
+MANAGER APPROVES RECOVERY:
+
+Affected workers receive updated assignments.
+
+Features:
+
+Notification list.
+Unread count.
+Mark as read.
+Mark all as read.
+Notification category.
+Timestamp.
+Related record link.
+
+Implement database-driven notifications and real-time updates where supported.
+
+==================================================
+
+13. CONNECTED DATA AND SHARED WORKFLOWS
+
+==================================================
+
+THIS REQUIREMENT IS EXTREMELY IMPORTANT.
+
+All role dashboards must be interconnected.
+
+Do not create separate isolated data stores for each role.
+
+Examples:
+
+WORKFLOW A:
+
+Worker reports a fault.
+→ Manager sees the fault.
+→ Technician receives maintenance request.
+→ Recovery engine identifies affected resources.
+→ Manager approves recovery.
+→ Worker sees updated assignment.
+
+WORKFLOW B:
+
+Manager creates a production order.
+→ Worker receives task assignment.
+→ Worker updates production progress.
+→ Manager sees updated production.
+→ Analytics update.
+
+WORKFLOW C:
+
+Technician completes maintenance.
+→ Machine status updates after authorized confirmation.
+→ Manager sees machine availability.
+→ Recovery engine can use the machine again.
+
+WORKFLOW D:
+
+Worker submits safety incident.
+→ Manager sees incident.
+→ Manager assigns corrective action.
+→ Responsible person receives notification.
+→ Incident status updates.
+→ Safety analytics refresh.
+
+Every workflow must use the same underlying database records.
+
+Use server-side validation and database transactions where required.
+
+==================================================
+
+14. ANALYTICS AND REPORTING
+
+==================================================
+
+Build a complete analytics section for authorized managers.
+
+Include:
+
+Production Analytics
+Daily production.
+Weekly production.
+Monthly production.
+Production target achievement.
+Delayed orders.
+Department performance.
+Workforce Analytics
+Attendance trends.
+Worker availability.
+Worker utilization.
+Shift distribution.
+Skill distribution.
+Machine Analytics
+Operating time.
+Idle time.
+Fault time.
+Utilization.
+Downtime history.
+Maintenance Analytics
+Maintenance requests.
+Completed maintenance.
+Pending maintenance.
+Overdue maintenance.
+Maintenance response time.
+Safety Analytics
+Reported incidents.
+Incident categories.
+Severity distribution.
+Resolution time.
+Pending corrective actions.
+
+Allow:
+
+Date filters.
+Department filters.
+CSV export.
+Printable reports.
+
+Use accurate calculations.
+
+Do not invent performance improvements.
+
+==================================================
+
+15. DATABASE ARCHITECTURE
+
+==================================================
+
+Use PostgreSQL with a properly normalized relational schema.
+
+Recommended tables:
+
+users
+roles
+factories
+departments
+workers
+skills
+worker_skills
+certifications
+machines
+shifts
+shift_assignments
+attendance
+production_orders
+production_tasks
+production_logs
+machine_assignments
+machine_status_logs
+safety_incidents
+safety_actions
+maintenance_requests
+maintenance_schedules
+maintenance_logs
+alerts
+notifications
+simulation_scenarios
+simulation_results
+recovery_plans
+recovery_recommendations
+audit_logs
+
+Define:
+
+Primary keys.
+Foreign keys.
+Unique constraints.
+Required fields.
+Indexes.
+Relationships.
+Timestamps.
+Status constraints.
+
+Use UUIDs for important record identifiers.
+
+Maintain proper historical records.
+
+Do not delete operational history when changing a record's current status.
+
+Use appropriate archival or soft-deletion workflows where necessary.
+
+==================================================
+
+16. TECHNOLOGY STACK
+
+==================================================
+
+Use the following stack.
+
+FRONTEND:
+
+React.js.
+Vite.
+TypeScript.
+Tailwind CSS.
+shadcn/ui.
+Lucide React.
+Framer Motion.
+Recharts.
+React Hook Form.
+Zod.
+
+BACKEND:
+
+Node.js.
+Express.js.
+TypeScript.
+REST APIs.
+
+DATABASE:
+
+PostgreSQL.
+Prisma ORM.
+
+AUTHENTICATION:
+
+Supabase Auth or an equivalent secure authentication provider.
+
+REAL-TIME:
+
+Supabase Realtime or database-backed event updates.
+
+DEPLOYMENT:
+
+Vercel for frontend.
+Render or an equivalent backend hosting provider.
+Supabase PostgreSQL and authentication.
+
+VERSION CONTROL:
+
+GitHub.
+
+If Google AI Studio's available execution environment does not support a particular service directly, generate the complete integration code and clear setup instructions.
+
+Do not silently replace the required backend with frontend-only mock data.
+
+==================================================
+
+17. FRONTEND DESIGN SYSTEM
+
+==================================================
+
+The UI/UX is a major part of this project.
+
+The website must look like a premium industrial enterprise SaaS product.
+
+Avoid:
+
+Generic dashboard templates.
+Excessive gradients.
+Unnecessary glassmorphism.
+Cartoon illustrations.
+Repetitive card layouts.
+Excessive rounded components.
+Bright blue across the entire website.
+Random colors.
+Unrelated stock imagery.
+Oversized animations.
+Main Design Direction
+
+Industrial Premium.
+
+Use realistic industrial photography and sophisticated interface elements.
+
+PRIMARY COLORS:
+
+Charcoal:
+#171A21
+
+Graphite:
+#242A33
+
+Industrial Orange:
+#FF8A32
+
+Teal:
+#19C6B4
+
+White:
+#F5F6F8
+
+Secondary:
+#9CA3AF
+
+Success:
+#22C55E
+
+Warning:
+#F59E0B
+
+Danger:
+#EF4444
+
+Individual Module Color Identity
+
+Landing Page:
+Charcoal + Orange.
+
+Login:
+Deep Graphite + Orange.
+
+Administrator:
+Charcoal + Orange.
+
+Manager:
+Graphite + Teal.
+
+Worker:
+Purple + Pink.
+
+Shift Planning:
+Indigo + Cyan.
+
+Machines:
+Graphite + Teal.
+
+Production:
+Orange + Yellow.
+
+Safety:
+Red + Coral.
+
+Maintenance:
+Green + Emerald.
+
+Recovery Engine:
+Violet + Orange.
+
+Maintain consistent typography, spacing, iconography and component quality.
+
+Typography
+
+Use:
+
+Inter.
+Manrope.
+Plus Jakarta Sans.
+
+Use professional typography hierarchy.
+
+Sidebar
+
+Create role-specific navigation.
+
+Each role must see only authorized navigation options.
+
+Sidebar features:
+
+Logo.
+Navigation groups.
+Active route indicator.
+Collapsible layout.
+Profile section.
+Notification indicator.
+Logout.
+Dashboard Layout
+
+Use:
+
+Professional top bar.
+Breadcrumbs.
+Page title.
+Date filters.
+KPI cards.
+Data visualizations.
+Operational tables.
+Activity feed.
+Alerts panel.
+
+Avoid making all modules look identical.
+
+Use suitable layouts for calendars, tables, workflows, analytics and simulation tools.
+
+==================================================
+
+18. REALISTIC IMAGES AND VISUAL ASSETS
+
+==================================================
+
+Use realistic, high-quality industrial visuals.
+
+Landing page:
+
+Modern manufacturing facility.
+Factory production floor.
+Industrial machinery.
+
+Workforce:
+
+Professional factory workforce.
+Manufacturing team.
+
+Machines:
+
+Industrial equipment.
+Manufacturing machinery.
+
+Production:
+
+Production lines.
+Manufacturing processes.
+
+Safety:
+
+Workplace safety.
+Industrial safety procedures.
+
+Maintenance:
+
+Equipment maintenance.
+Industrial technicians.
+
+Recovery:
+
+Factory control room.
+Industrial operations monitoring.
+
+Important:
+
+Images must relate to the relevant feature.
+Do not repeat the same image throughout the application.
+Use appropriate crops.
+Maintain image readability.
+Do not use images that make the application look like an unrelated corporate website.
+Use licensed or otherwise permitted image assets.
+Provide local fallbacks if remote images fail.
+
+==================================================
+
+19. BACKEND AND API IMPLEMENTATION
+
+==================================================
+
+Create complete REST APIs.
+
+Organize APIs by domain.
+
+Authentication:
+
+POST /api/auth/login
+POST /api/auth/logout
+GET /api/auth/me
+POST /api/auth/forgot-password
+
+Administration:
+
+GET /api/admin/users
+POST /api/admin/users
+PATCH /api/admin/users/
+GET /api/admin/factories
+POST /api/admin/factories
+GET /api/admin/departments
+POST /api/admin/departments
+
+Workforce:
+
+GET /api/workers
+POST /api/workers
+PATCH /api/workers/
+GET /api/workers//skills
+
+Shifts:
+
+GET /api/shifts
+POST /api/shifts
+POST /api/shifts/assign
+GET /api/shift-assignments
+
+Attendance:
+
+POST /api/attendance/check-in
+POST /api/attendance/check-out
+GET /api/attendance
+
+Machines:
+
+GET /api/machines
+POST /api/machines
+PATCH /api/machines/
+GET /api/machines//history
+
+Production:
+
+GET /api/production/orders
+POST /api/production/orders
+PATCH /api/production/orders/
+POST /api/production/logs
+
+Safety:
+
+GET /api/safety/incidents
+POST /api/safety/incidents
+PATCH /api/safety/incidents/
+
+Maintenance:
+
+GET /api/maintenance/requests
+POST /api/maintenance/requests
+PATCH /api/maintenance/requests/
+POST /api/maintenance/requests//complete
+
+Recovery:
+
+POST /api/recovery/analyze
+POST /api/recovery/recommend
+POST /api/recovery/approve
+POST /api/recovery/reject
+GET /api/recovery/history
+
+Simulation:
+
+POST /api/simulations
+GET /api/simulations
+GET /api/simulations/
+
+Analytics:
+
+GET /api/analytics/overview
+GET /api/analytics/production
+GET /api/analytics/workforce
+GET /api/analytics/machines
+GET /api/analytics/maintenance
+GET /api/analytics/safety
+
+Notifications:
+
+GET /api/notifications
+PATCH /api/notifications//read
+
+These are the initial API contracts.
+
+You may add supporting endpoints when required.
+
+Implement:
+
+Request validation.
+Authentication middleware.
+Authorization middleware.
+Error handling.
+Consistent response formats.
+Pagination.
+Filtering.
+Logging.
+Secure database access.
+
+Never trust a user ID, role or resource permission supplied by the frontend without backend verification.
+
+==================================================
+
+20. SAMPLE DATA AND DEMONSTRATION ENVIRONMENT
+
+==================================================
+
+Create a realistic development seed dataset.
+
+Example factory:
+
+Factory Name: Northstar Manufacturing Works.
+
+Departments:
+
+Assembly.
+Welding.
+Packaging.
+Quality Control.
+Maintenance.
+
+Sample resources:
+
+30 workers.
+4 managers or supervisors where appropriate.
+5 maintenance technicians.
+12 machines.
+3 shifts.
+10 production orders.
+20 production tasks.
+Historical production records.
+Sample attendance records.
+Sample safety incidents.
+Sample maintenance requests.
+
+Generate internally consistent relationships.
+
+Do not create random unrelated records.
+
+Every worker must have realistic skills.
+
+Every machine must have relevant requirements.
+
+Production orders must reference valid machines and departments.
+
+All seed records must be clearly identifiable as demonstration data.
+
+Provide a database seeding command.
+
+==================================================
+
+21. SECURITY AND DATA VALIDATION
+
+==================================================
+
+Implement:
+
+Role-based authorization.
+Secure password handling.
+Session validation.
+Input validation.
+SQL injection protection through ORM practices.
+XSS protection.
+Rate limiting for sensitive endpoints.
+Secure environment variables.
+Error handling.
+Audit logging.
+Database access restrictions.
+
+Use least-privilege permissions.
+
+Workers must not be able to:
+
+Create administrator accounts.
+Modify other workers' attendance.
+Change machine configurations.
+Approve recovery plans.
+Access unrestricted factory analytics.
+
+Technicians must not be able to:
+
+Change worker roles.
+Modify production targets without authorization.
+Approve their own restricted maintenance operations.
+
+Managers must not be able to:
+
+Modify system authentication roles.
+Bypass resource eligibility constraints.
+
+Administrators must have explicitly defined administrative permissions.
+
+==================================================
+
+22. FUNCTIONALITY AND QUALITY REQUIREMENTS
+
+==================================================
+
+Every button must have an actual action.
+
+Every form must:
+
+Validate input.
+Display errors.
+Save valid records.
+Show success messages.
+
+Every table must support appropriate:
+
+Search.
+Sorting.
+Filtering.
+Pagination.
+
+Every dashboard must retrieve data from the backend.
+
+Every chart must use actual database records or clearly labelled demo records.
+
+Every workflow must update connected records.
+
+Every important operation must create an appropriate audit record.
+
+Implement:
+
+Loading states.
+Empty states.
+Error states.
+Success states.
+Confirmation dialogs.
+Responsive layouts.
+Accessibility.
+Keyboard navigation.
+Appropriate contrast.
+
+Do not use alert() as the primary interaction design.
+
+Use professional toast notifications and confirmation dialogs.
+
+==================================================
+
+23. COMPLETE TESTING REQUIREMENTS
+
+==================================================
+
+Test all four roles independently.
+
+Test authentication.
+
+Test unauthorized route access.
+
+Test worker attendance.
+
+Test shift creation.
+
+Test worker allocation.
+
+Test machine registration.
+
+Test machine fault reporting.
+
+Test production order creation.
+
+Test production progress updates.
+
+Test safety reporting.
+
+Test maintenance assignment.
+
+Test maintenance completion.
+
+Test recovery recommendation generation.
+
+Test recovery approval.
+
+Test scenario simulation.
+
+Test notifications.
+
+Test dashboard updates.
+
+Test database relationships.
+
+Test responsive design.
+
+Test error handling.
+
+Test application refresh and session persistence.
+
+The application must not lose saved information after refreshing the page.
+
+==================================================
+
+24. DEVELOPMENT EXECUTION STRATEGY
+
+==================================================
+
+Build the application in a structured order.
+
+PHASE 1:
+Project structure, environment configuration, database setup and authentication.
+
+PHASE 2:
+Landing page, login page, role-based routing and design system.
+
+PHASE 3:
+Administrator dashboard and administration features.
+
+PHASE 4:
+Manager dashboard, workforce, shifts and machines.
+
+PHASE 5:
+Production, safety and maintenance workflows.
+
+PHASE 6:
+Worker dashboard and technician dashboard.
+
+PHASE 7:
+Intelligent Factory Recovery Engine.
+
+PHASE 8:
+Scenario Simulator.
+
+PHASE 9:
+Notifications, analytics and reporting.
+
+PHASE 10:
+Testing, security, responsiveness and deployment preparation.
+
+At every phase:
+
+Implement the actual feature.
+Connect it to the backend.
+Connect it to the database.
+Test its workflow.
+Fix errors.
+Verify that existing modules still work.
+
+Do not replace existing working features when adding new features.
+
+Maintain a consistent project architecture.
+
+Do not leave critical modules for later without implementing them.
+
+==================================================
+
+25. FINAL ACCEPTANCE CRITERIA
+
+==================================================
+
+The application is considered complete only when all the following requirements are satisfied.
+
+LANDING PAGE:
+
+Professional and responsive.
+Correct branding.
+Functional navigation.
+Functional CTAs.
+Relevant industrial visuals.
+
+AUTHENTICATION:
+
+Secure login.
+Four roles.
+Correct role verification.
+Correct dashboard redirection.
+Functional logout.
+Protected routes.
+
+ADMINISTRATOR:
+
+Factory management.
+Department management.
+User management.
+Machine registry.
+Skills and certifications.
+Audit logs.
+
+MANAGER:
+
+Factory overview.
+Workforce management.
+Shift planning.
+Machine management.
+Production management.
+Safety management.
+Maintenance management.
+Analytics.
+Recovery engine.
+Scenario simulator.
+
+WORKER:
+
+Personal dashboard.
+Attendance.
+Shifts.
+Production tasks.
+Machine information.
+Fault reporting.
+Safety reporting.
+Notifications.
+
+TECHNICIAN:
+
+Maintenance dashboard.
+Fault requests.
+Maintenance scheduling.
+Repair records.
+Machine history.
+Maintenance completion.
+
+INTELLIGENT FEATURES:
+
+Skill-based allocation.
+Resource compatibility.
+Production priority.
+Recovery recommendations.
+Scenario simulation.
+Before-and-after comparison.
+Manager approval.
+Recovery history.
+
+SYSTEM:
+
+Shared database.
+Shared operational records.
+Database-driven notifications.
+Role permissions.
+API integration.
+Responsive design.
+Error handling.
+Security.
+Testing.
+
+==================================================
+
+26. FINAL INSTRUCTIONS TO GOOGLE AI STUDIO
+
+==================================================
+
+Build FactoryPulse IntelliOps as a complete, professional, interconnected industrial management web application.
+
+Do not stop after generating the landing page.
+
+Do not stop after generating the login page.
+
+Do not stop after generating dashboard designs.
+
+Do not create only a frontend prototype.
+
+Implement the complete application, including its backend, database schema, authentication, business logic, APIs, workflows and integrations.
+
+Prioritize functional implementation over decorative elements.
+
+The Factory Recovery Engine must be implemented using actual resource data and transparent algorithms.
+
+All four dashboards must be different, role-specific and interconnected.
+
+The design must be realistic, premium, professional, attractive and directly related to industrial operations management.
+
+Do not introduce hardware or IoT requirements.
+
+Do not add unrelated features.
+
+Do not remove any of the required modules.
+
+Do not leave non-functional buttons.
+
+Do not use fake operational data without labelling it.
+
+Do not claim that a feature works until it has been implemented and tested.
+
+If credentials or external configuration are required, create the complete integration code and provide exact setup instructions. Do not silently skip the integration.
+
+Before declaring completion, inspect the entire project, identify incomplete features, fix errors and verify the complete user workflow.
+
+FINAL PRODUCT GOAL:
+
+A complete industrial operations management platform in which an administrator manages the factory configuration, a manager controls factory operations, workers manage their assigned activities, technicians manage maintenance, and the Factory Recovery Engine connects all operational information to generate transparent, actionable recovery recommendations.
+
+The final product must be suitable for a professional hackathon demonstration and must look and behave like a genuine industrial SaaS platform.
+
+BUILD THE COMPLETE FACTORYPULSE INTELLIOPS APPLICATION.
