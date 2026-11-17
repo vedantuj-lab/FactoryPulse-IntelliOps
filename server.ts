@@ -3776,7 +3776,7 @@ app.post('/api/admin/demo-environment/reset', requireAuth, requireRoles('ADMIN',
 // VITE DEV MIDDLEWARE / PRODUCTION STATIC SERVING
 // ============================================================================
 async function startServer() {
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 5173;
 
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
