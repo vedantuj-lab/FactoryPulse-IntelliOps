@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, ShieldCheck, AlertCircle, ArrowLeft } from 'lucide-react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { Eye, EyeOff, Lock, Mail, ShieldCheck, AlertCircle, ArrowLeft, LogOut } from 'lucide-react';
 import { FactoryPulseLogo, ResilientImage } from '../components/BrandLogo';
 import { INDUSTRIAL_ASSETS } from '../lib/assets';
 import { useAuth, UserRole, getRoleDashboardPath } from '../context/AuthContext';
@@ -36,7 +36,7 @@ const ROLE_OPTIONS: { role: UserRole; label: string; demoEmail: string; desc: st
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, login } = useAuth();
+  const { user, login, logout } = useAuth();
   const { notify } = useToast();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('MANAGER');
@@ -54,11 +54,14 @@ export const LoginPage: React.FC = () => {
   const [resetNewPassword, setResetNewPassword] = useState('');
   const [resetBusy, setResetBusy] = useState(false);
 
+  const [searchParams] = useSearchParams();
+  const forceSwitch = searchParams.get('switch') === 'true';
+
   useEffect(() => {
-    if (user) {
+    if (user && !forceSwitch) {
       navigate(getRoleDashboardPath(user.role), { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, forceSwitch, navigate]);
 
   useEffect(() => {
     apiFetch<{ demoPasswordHint: string }>('/api/public/pulse-summary')
@@ -73,11 +76,31 @@ export const LoginPage: React.FC = () => {
       });
   }, []);
 
-  const handleSelectDemoAccount = (opt: typeof ROLE_OPTIONS[0]) => {
+  const handleSelectDemoAccount = async (opt: typeof ROLE_OPTIONS[0]) => {
     setSelectedRole(opt.role);
     setEmail(opt.demoEmail);
     setPassword(demoHintPassword);
     setErrorMsg(null);
+
+    // If currently signed in, clear previous session and sign in immediately as selected role
+    setSubmitting(true);
+    try {
+      if (user) {
+        await logout();
+      }
+      const res = await login({
+        email: opt.demoEmail,
+        password: demoHintPassword,
+        selectedRole: opt.role,
+        rememberMe,
+      });
+      notify('success', `Signed in as ${res.user.fullName}`, `Role portal: ${res.user.role}`);
+      navigate(res.redirectTo, { replace: true });
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Login failed.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleGoogleLogin = async (roleOverride?: UserRole) => {
@@ -215,6 +238,25 @@ export const LoginPage: React.FC = () => {
       {/* RIGHT COLUMN: Authentication Form & Role Verification Selector */}
       <div className="lg:col-span-6 flex flex-col justify-center px-4 sm:px-10 py-10 bg-[#1B1F27]">
         <div className="max-w-md w-full mx-auto">
+          {user && (
+            <div className="mb-6 bg-[#242A33] border border-[#19C6B4]/60 rounded-lg p-4 text-xs text-neutral-200 flex items-center justify-between gap-3">
+              <div>
+                <p className="font-semibold text-white">Currently Signed In: {user.fullName}</p>
+                <p className="text-[#19C6B4] font-mono mt-0.5">Role: {user.role} ({user.email})</p>
+              </div>
+              <button
+                type="button"
+                onClick={async () => {
+                  await logout();
+                  notify('info', 'Signed out from current session');
+                }}
+                className="px-3 py-1.5 bg-[#EF4444] text-white font-bold rounded hover:bg-red-600 transition-colors shrink-0 flex items-center gap-1"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
           <div className="lg:hidden flex items-center justify-between mb-8">
             <Link to="/">
               <FactoryPulseLogo size="sm" />
