@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { ShieldAlert } from 'lucide-react';
 import { AuthProvider, useAuth, UserRole, getRoleDashboardPath } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { FactoryPulseLogo } from './components/BrandLogo';
 import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
@@ -63,9 +64,10 @@ const ProtectedRoute: React.FC<{
 
 export function App() {
   return (
-    <ToastProvider>
-      <AuthProvider>
-        <BrowserRouter>
+    <LanguageProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -171,6 +173,7 @@ export function App() {
         </BrowserRouter>
       </AuthProvider>
     </ToastProvider>
+    </LanguageProvider>
   );
 }
 

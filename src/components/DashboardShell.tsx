@@ -12,8 +12,11 @@ import {
 } from 'lucide-react';
 import { useAuth, UserRole } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { useLanguage } from '../context/LanguageContext';
+import { LANGUAGE_OPTIONS, SupportedLanguage } from '../lib/i18n';
 import { apiFetch } from '../lib/api';
 import { FactoryPulseLogo } from './BrandLogo';
+import { FactoryPulseAssistant } from './FactoryPulseAssistant';
 
 export interface NavItem {
   id: string;
@@ -58,6 +61,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
 }) => {
   const { user, logout, refreshProfile } = useAuth();
   const { notify } = useToast();
+  const { language, setLanguage } = useLanguage();
   const navigate = useNavigate();
 
   const [collapsed, setCollapsed] = useState(false);
@@ -303,6 +307,19 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
           <div className="flex items-center gap-2.5 shrink-0">
             {headerActions}
 
+            {/* Language Selector */}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as SupportedLanguage)}
+              className="bg-[#242A33] border border-neutral-700/80 rounded-md px-2.5 py-1 text-xs text-neutral-200 font-medium focus:outline-none focus:border-[#21C7B7]"
+            >
+              {LANGUAGE_OPTIONS.map((opt) => (
+                <option key={opt.code} value={opt.code}>
+                  {opt.nativeName} ({opt.code.toUpperCase()})
+                </option>
+              ))}
+            </select>
+
             <button
               onClick={() => setNotifOpen((o) => !o)}
               className="relative p-2 rounded-md bg-[#242A33] border border-neutral-700/80 text-neutral-200 hover:text-white transition-colors"
@@ -328,6 +345,9 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
 
         {/* Main Content Viewport */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1440px] w-full mx-auto">{children}</main>
+
+        {/* Conversational & Voice Assistant Widget */}
+        <FactoryPulseAssistant />
       </div>
 
       {/* Notification Slide-over Panel */}

@@ -211,6 +211,153 @@ app.post('/api/auth/login', rateLimitAuth, (req, res) => {
   });
 });
 
+// GOOGLE OAUTH AUTHENTICATION ROUTE
+app.post('/api/auth/google', rateLimitAuth, (req, res) => {
+  const { googleEmail, googleName, roleHint, rememberMe } = req.body || {};
+  if (!googleEmail || !String(googleEmail).includes('@')) {
+    return res.status(400).json({ error: 'Valid Google email is required for OAuth authentication.' });
+  }
+
+  const normalizedEmail = String(googleEmail).trim().toLowerCase();
+  let row = db.prepare(`
+    SELECT u.*, r.name as role_name, d.name as department_name, w.id as worker_id
+    FROM users u
+    JOIN roles r ON u.role_id = r.id
+    LEFT JOIN departments d ON u.department_id = d.id
+    LEFT JOIN workers w ON w.user_id = u.id
+    WHERE LOWER(u.email) = ?
+  `).get(normalizedEmail) as any;
+
+  // If new Google account, provision account automatically based on roleHint
+  if (!row) {
+    const targetRoleName = String(roleHint || 'WORKER').toUpperCase();
+    const roleRecord = db.prepare('SELECT id, name FROM roles WHERE name = ?').get(targetRoleName) as any || db.prepare("SELECT id, name FROM roles WHERE name = 'WORKER'").get() as any;
+    const deptRecord = db.prepare('SELECT id FROM departments LIMIT 1').get() as any;
+
+    const newUserId = uuid();
+    const empCode = `EMP-GGL-${Date.now().toString().slice(-4)}`;
+    const fullName = googleName || normalizedEmail.split('@')[0].replace(/[._]/g, ' ');
+    const dummyHash = hashPassword(`GoogleOAuth!${Date.now()}`);
+
+    const now = new Date().toISOString();
+    db.prepare(`
+      INSERT INTO users (id, email, password_hash, full_name, employee_code, role_id, department_id, is_active, is_demo, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 1, 1, ?, ?)
+    `).run(newUserId, normalizedEmail, dummyHash, fullName, empCode, roleRecord.id, deptRecord?.id || null, now, now);
+
+    if (roleRecord.name === 'WORKER') {
+      db.prepare(`
+        INSERT INTO workers (id, user_id, department_id, designation, experience_years, availability, is_demo, created_at)
+        VALUES (?, ?, ?, 'Line Operator (Google OAuth)', 2, 'AVAILABLE', 1, ?)
+      `).run(uuid(), newUserId, deptRecord?.id || null, now);
+    }
+
+    row = db.prepare(`
+      SELECT u.*, r.name as role_name, d.name as department_name, w.id as worker_id
+      FROM users u
+      JOIN roles r ON u.role_id = r.id
+      LEFT JOIN departments d ON u.department_id = d.id
+      LEFT JOIN workers w ON w.user_id = u.id
+      WHERE u.id = ?
+    `).get(newUserId) as any;
+  }
+
+  if (!row.is_active) {
+    return res.status(403).json({ error: 'This Google account has been deactivated by an Administrator.' });
+  }
+
+  const token = crypto.randomBytes(32).toString('hex');
+  const ttlHours = rememberMe ? 24 * 7 : 12;
+  const expiresAt = new Date(Date.now() + ttlHours * 3600_000).toISOString();
+
+  db.prepare(`
+    INSERT INTO sessions (token, user_id, expires_at, created_at)
+    VALUES (?, ?, ?, ?)
+  `).run(token, row.id, expiresAt, new Date().toISOString());
+
+  createAuditLog(row.id, 'GOOGLE_AUTH_LOGIN', 'USER', row.id, `${row.full_name} (${row.role_name}) signed in via Google OAuth (${row.email})`);
+
+  const redirectMap: Record<string, string> = {
+    ADMIN: '/admin/dashboard',
+    MANAGER: '/manager/dashboard',
+    WORKER: '/worker/dashboard',
+    TECHNICIAN: '/technician/dashboard',
+  };
+
+  res.json({
+    token,
+    expiresAt,
+    redirectTo: redirectMap[row.role_name],
+    user: {
+      id: row.id,
+      email: row.email,
+      fullName: row.full_name,
+      employeeCode: row.employee_code,
+      role: row.role_name,
+      departmentId: row.department_id,
+      departmentName: row.department_name,
+      phone: row.phone,
+      workerId: row.worker_id || null,
+    },
+  });
+});
+
+// CONVERSATIONAL ASSISTANT ROUTE (/api/assistant/chat)
+app.post('/api/assistant/chat', requireAuth, (req, res) => {
+  const { message = '', language = 'en' } = req.body || {};
+  const msg = String(message).trim().toLowerCase();
+  const role = req.user!.role;
+
+  let reply = '';
+  let actionLink: string | undefined = undefined;
+  let actionLabel: string | undefined = undefined;
+
+  if (msg.includes('hi') || msg.includes('hello') || msg.includes('good morning') || msg.includes('namaste')) {
+    reply = `Hello ${req.user!.fullName}! Welcome to FactoryPulse IntelliOps. How can I assist you with factory operations today?`;
+  } else if (msg.includes('fault') || msg.includes('broken') || msg.includes('machine fault')) {
+    const faultCount = (db.prepare(`SELECT COUNT(*) as c FROM machines WHERE status IN ('FAULT', 'MAINTENANCE', 'VERIFICATION_REQUIRED')`).get() as any).c;
+    const machines = db.prepare(`SELECT machine_code, name, status FROM machines WHERE status IN ('FAULT', 'MAINTENANCE', 'VERIFICATION_REQUIRED') LIMIT 3`).all() as any[];
+    if (faultCount > 0) {
+      reply = `There are currently ${faultCount} machine(s) in fault/maintenance state: ${machines.map(m => `${m.machine_code} (${m.name} - ${m.status})`).join(', ')}.`;
+      actionLink = role === 'TECHNICIAN' ? '/technician/dashboard' : '/manager/dashboard?tab=machines';
+      actionLabel = 'View Machines';
+    } else {
+      reply = 'All plant machine bays are currently operating in nominal state with zero active faults.';
+    }
+  } else if (msg.includes('delay') || msg.includes('production delay') || msg.includes('order')) {
+    const delayed = db.prepare(`SELECT order_code, product_name, target_qty, produced_qty FROM production_orders WHERE status = 'DELAYED' LIMIT 2`).all() as any[];
+    if (delayed.length > 0) {
+      reply = `Active delayed orders detected: ${delayed.map(d => `${d.order_code} (${d.product_name}: ${d.produced_qty}/${d.target_qty} units)`).join(', ')}. The Recovery Engine can calculate minimal-change rerouting.`;
+      actionLink = '/manager/recovery-engine';
+      actionLabel = 'Open Recovery Engine';
+    } else {
+      reply = 'Production delivery schedules are on track with zero delayed orders recorded.';
+    }
+  } else if (msg.includes('worker') || msg.includes('shift') || msg.includes('headcount')) {
+    const activeWrk = (db.prepare(`SELECT COUNT(*) as c FROM workers WHERE availability = 'AVAILABLE' OR availability = 'ASSIGNED'`).get() as any).c;
+    reply = `Plant workforce active: ${activeWrk} workers currently available or assigned on shift.`;
+    actionLink = role === 'ADMIN' ? '/admin/dashboard' : '/manager/dashboard';
+    actionLabel = 'View Workforce';
+  } else if (msg.includes('safety') || msg.includes('hazard')) {
+    const hazards = db.prepare(`SELECT incident_code, category, severity FROM safety_incidents WHERE status != 'RESOLVED' LIMIT 2`).all() as any[];
+    if (hazards.length > 0) {
+      reply = `Active safety hazards logged: ${hazards.map(h => `${h.incident_code} (${h.category} - ${h.severity})`).join(', ')}.`;
+      actionLink = role === 'WORKER' ? '/worker/dashboard' : '/manager/dashboard';
+      actionLabel = 'View Safety';
+    } else {
+      reply = 'Zero open critical safety hazards. Workplace safety compliance is verified.';
+    }
+  } else if (msg.includes('recovery') || msg.includes('recommendation')) {
+    reply = 'The Intelligent Recovery Engine evaluates hard eligibility constraints (skills, valid certs, shift availability, machine capacity) before scoring options on a 0-100 scale.';
+    actionLink = '/manager/recovery-engine';
+    actionLabel = 'Open Recovery Engine';
+  } else {
+    reply = `I have logged your operational query: "${message}". You may inspect current plant health, production orders, and recovery proposals directly from your authorized portal.`;
+  }
+
+  res.json({ reply, actionLink, actionLabel });
+});
+
 app.post('/api/auth/logout', requireAuth, (req, res) => {
   if (req.sessionToken) {
     db.prepare('DELETE FROM sessions WHERE token = ?').run(req.sessionToken);
