@@ -29,10 +29,11 @@ import { useToast } from '../context/ToastContext';
 
 const ADMIN_NAV: NavItem[] = [
   { id: 'overview', label: '1. System Overview', icon: LayoutDashboard, group: 'Administrator Portal' },
-  { id: 'workers', label: '2. Workforce Registry', icon: Users, group: 'Administrator Portal' },
-  { id: 'machines', label: '3. Machine Registry', icon: Cpu, group: 'Administrator Portal' },
-  { id: 'users', label: '4. User Management', icon: Sliders, group: 'Administrator Portal' },
-  { id: 'factories', label: '5. Factory & Config', icon: Building2, group: 'Administrator Portal' },
+  { id: 'factories', label: '2. Factory & Departments', icon: Building2, group: 'Administrator Portal' },
+  { id: 'users', label: '3. User Management & Roles', icon: Users, group: 'Administrator Portal' },
+  { id: 'workers', label: '4. Workforce Registry & Skills', icon: Award, group: 'Administrator Portal' },
+  { id: 'machines', label: '5. Machine Registry & Specs', icon: Cpu, group: 'Administrator Portal' },
+  { id: 'audits', label: '6. Settings & Audit Logs', icon: FileSearch, group: 'Administrator Portal' },
 ];
 
 export const AdminDashboard: React.FC = () => {
@@ -350,7 +351,7 @@ export const AdminDashboard: React.FC = () => {
   return (
     <DashboardShell
       roleTitle="Administrator"
-      accentHex="#FF8A32"
+      accentHex="#9B8AFB"
       navItems={ADMIN_NAV}
       activeTab={activeTab}
       onSelectTab={setActiveTab}
@@ -359,7 +360,7 @@ export const AdminDashboard: React.FC = () => {
       headerActions={
         <button
           onClick={() => exportToCsv(`factorypulse_audit_logs_${new Date().toISOString().slice(0, 10)}.csv`, audits)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#FF8A32] text-[#171A21] rounded-md hover:bg-[#ff9b4f] transition-colors whitespace-nowrap shrink-0"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#9B8AFB] text-[#171B22] rounded-md hover:bg-[#a798fc] transition-colors whitespace-nowrap shrink-0"
         >
           <Download className="w-3.5 h-3.5" />
           Export Audit CSV

@@ -134,7 +134,7 @@ export const TechnicianDashboard: React.FC = () => {
   return (
     <DashboardShell
       roleTitle="Maintenance Technician"
-      accentHex="#10B981"
+      accentHex="#C2410C"
       navItems={TECH_NAV}
       activeTab={activeTab}
       onSelectTab={setActiveTab}
@@ -143,7 +143,7 @@ export const TechnicianDashboard: React.FC = () => {
       headerActions={
         <button
           onClick={() => setActiveTab('requests')}
-          className="px-3 py-1.5 text-xs font-semibold bg-[#10B981] text-[#171A21] rounded-md hover:bg-emerald-400 transition-colors whitespace-nowrap shrink-0"
+          className="px-3 py-1.5 text-xs font-semibold bg-[#C2410C] text-white rounded-md hover:bg-[#ea580c] transition-colors whitespace-nowrap shrink-0"
         >
           Open Active Work Orders ({openRequests.length})
         </button>

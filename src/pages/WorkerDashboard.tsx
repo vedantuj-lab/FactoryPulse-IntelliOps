@@ -193,7 +193,7 @@ export const WorkerDashboard: React.FC = () => {
   return (
     <DashboardShell
       roleTitle="Floor Operator"
-      accentHex="#C084FC"
+      accentHex="#B6D957"
       navItems={WORKER_NAV}
       activeTab={activeTab}
       onSelectTab={setActiveTab}
@@ -201,10 +201,10 @@ export const WorkerDashboard: React.FC = () => {
       breadcrumbSub={data ? `${data.worker.department_name} Department · ${data.worker.employee_code}` : 'Operator Terminal'}
       headerActions={
         <button
-          onClick={() => setActiveTab('fault')}
-          className="px-3 py-1.5 text-xs font-semibold bg-[#EC4899] text-white rounded-md hover:bg-pink-500 transition-colors whitespace-nowrap shrink-0"
+          onClick={() => setActiveTab('report')}
+          className="px-3 py-1.5 text-xs font-semibold bg-[#FF6B35] text-white rounded-md hover:bg-[#ea580c] transition-colors whitespace-nowrap shrink-0"
         >
-          Report Machine Fault
+          Report Issue / Hazard
         </button>
       }
     >
