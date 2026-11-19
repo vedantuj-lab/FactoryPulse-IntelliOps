@@ -38,8 +38,11 @@ import { useToast } from '../context/ToastContext';
 export const MANAGER_NAV_ITEMS: NavItem[] = [
   { id: 'overview', label: '1. Operations Dashboard', icon: LayoutDashboard, group: 'Manager Portal', href: '/manager/dashboard?tab=overview' },
   { id: 'production', label: '2. Production Monitoring', icon: ClipboardList, group: 'Manager Portal', href: '/manager/dashboard?tab=production' },
-  { id: 'recovery', label: '3. Recovery Engine', icon: GitBranch, group: 'Manager Portal', href: '/manager/recovery-engine' },
-  { id: 'safety-maintenance', label: '4. Safety & Maintenance', icon: ShieldAlert, group: 'Manager Portal', href: '/manager/dashboard?tab=safety-maintenance' },
+  { id: 'workforce', label: '3. Workforce & Shifts', icon: Users, group: 'Manager Portal', href: '/manager/dashboard?tab=workforce' },
+  { id: 'machines', label: '4. Machine Fleet', icon: Cpu, group: 'Manager Portal', href: '/manager/dashboard?tab=machines' },
+  { id: 'recovery', label: '5. Recovery Engine', icon: GitBranch, group: 'Manager Portal', href: '/manager/recovery-engine' },
+  { id: 'safety', label: '6. Safety & Hazards', icon: ShieldAlert, group: 'Manager Portal', href: '/manager/dashboard?tab=safety' },
+  { id: 'maintenance', label: '7. Maintenance Dispatch', icon: Wrench, group: 'Manager Portal', href: '/manager/dashboard?tab=maintenance' },
 ];
 
 export const RecoveryEnginePage: React.FC = () => {

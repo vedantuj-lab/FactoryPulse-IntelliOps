@@ -28,9 +28,11 @@ import { apiFetch, exportToCsv } from '../lib/api';
 import { useToast } from '../context/ToastContext';
 
 const ADMIN_NAV: NavItem[] = [
-  { id: 'overview', label: '1. Overview', icon: LayoutDashboard, group: 'Administrator' },
-  { id: 'workers-machines', label: '2. Workers & Machines', icon: Cpu, group: 'Administrator' },
-  { id: 'users', label: '3. User Management', icon: Users, group: 'Administrator' },
+  { id: 'overview', label: '1. System Overview', icon: LayoutDashboard, group: 'Administrator Portal' },
+  { id: 'workers', label: '2. Workforce Registry', icon: Users, group: 'Administrator Portal' },
+  { id: 'machines', label: '3. Machine Registry', icon: Cpu, group: 'Administrator Portal' },
+  { id: 'users', label: '4. User Management', icon: Sliders, group: 'Administrator Portal' },
+  { id: 'factories', label: '5. Factory & Config', icon: Building2, group: 'Administrator Portal' },
 ];
 
 export const AdminDashboard: React.FC = () => {

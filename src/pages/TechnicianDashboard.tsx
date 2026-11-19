@@ -20,9 +20,10 @@ import { apiFetch } from '../lib/api';
 import { useToast } from '../context/ToastContext';
 
 const TECH_NAV: NavItem[] = [
-  { id: 'requests', label: '1. Assigned Repairs', icon: Wrench, group: 'Technician Terminal' },
-  { id: 'update-status', label: '2. Update Repair Status', icon: CalendarClock, group: 'Technician Terminal' },
-  { id: 'history', label: '3. Repair History', icon: History, group: 'Technician Terminal' },
+  { id: 'overview', label: '1. Maintenance Overview', icon: LayoutDashboard, group: 'Technician Terminal' },
+  { id: 'requests', label: '2. Assigned Repairs', icon: Wrench, group: 'Technician Terminal' },
+  { id: 'schedule', label: '3. Preventive Schedule', icon: CalendarClock, group: 'Technician Terminal' },
+  { id: 'history', label: '4. Service History', icon: History, group: 'Technician Terminal' },
 ];
 
 export const TechnicianDashboard: React.FC = () => {

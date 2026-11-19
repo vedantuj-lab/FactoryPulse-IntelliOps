@@ -16,9 +16,10 @@ import { apiFetch } from '../lib/api';
 import { useToast } from '../context/ToastContext';
 
 const WORKER_NAV: NavItem[] = [
-  { id: 'shifts', label: '1. My Shift', icon: CalendarClock, group: 'Floor Terminal' },
-  { id: 'tasks', label: '2. My Tasks', icon: ClipboardCheck, group: 'Floor Terminal' },
-  { id: 'report', label: '3. Report an Issue', icon: AlertTriangle, group: 'Floor Terminal' },
+  { id: 'overview', label: '1. My Workspace', icon: LayoutDashboard, group: 'Floor Terminal' },
+  { id: 'shifts', label: '2. My Shift & Attendance', icon: CalendarClock, group: 'Floor Terminal' },
+  { id: 'tasks', label: '3. My Tasks & Output', icon: ClipboardCheck, group: 'Floor Terminal' },
+  { id: 'report', label: '4. Report Fault / Safety Hazard', icon: AlertTriangle, group: 'Floor Terminal' },
 ];
 
 export const WorkerDashboard: React.FC = () => {
@@ -482,8 +483,8 @@ export const WorkerDashboard: React.FC = () => {
             </div>
           )}
 
-          {/* 8.7 REPORT MACHINE FAULT */}
-          {activeTab === 'fault' && (
+          {/* 8.7 REPORT MACHINE FAULT OR SAFETY HAZARD */}
+          {(activeTab === 'report' || activeTab === 'fault' || activeTab === 'safety') && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               <div className="lg:col-span-6 bg-[#242A33] border border-neutral-800 rounded-lg p-6">
                 <h3 className="text-base font-semibold text-[#F5F6F8]">Report Machine Fault</h3>
