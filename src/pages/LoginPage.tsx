@@ -77,12 +77,24 @@ export const LoginPage: React.FC = () => {
 
   const [searchParams] = useSearchParams();
   const forceSwitch = searchParams.get('switch') === 'true';
+  const paramRole = searchParams.get('role') as UserRole | null;
 
   useEffect(() => {
-    if (user && !forceSwitch) {
+    if (paramRole && ['ADMIN', 'MANAGER', 'WORKER', 'TECHNICIAN'].includes(paramRole)) {
+      const match = ROLE_OPTIONS.find((r) => r.role === paramRole);
+      if (match) {
+        setSelectedRole(match.role);
+        setEmail(match.demoEmail);
+        setPassword(demoHintPassword);
+      }
+    }
+  }, [paramRole, demoHintPassword]);
+
+  useEffect(() => {
+    if (user && !forceSwitch && !paramRole) {
       navigate(getRoleDashboardPath(user.role), { replace: true });
     }
-  }, [user, forceSwitch, navigate]);
+  }, [user, forceSwitch, paramRole, navigate]);
 
   useEffect(() => {
     apiFetch<{ demoPasswordHint: string }>('/api/public/pulse-summary')

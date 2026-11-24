@@ -930,6 +930,78 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* 4.85 FOUR ROLE PORTALS SELECTION SECTION */}
+      <section id="portals" className="py-16 lg:py-20 border-b border-neutral-800 bg-[#12151B]">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
+          <div className="max-w-2xl mb-10">
+            <p className="text-xs font-semibold text-[#F97316] tracking-widest uppercase mb-2">Role-Based Operational Access</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F9FAFB]">
+              Four Independent Role Portals. One Connected Database.
+            </h2>
+            <p className="text-sm text-neutral-300 mt-2 leading-relaxed">
+              Select an operational role below to sign in and experience its dedicated features, navigation, and permissions.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                role: 'ADMIN',
+                title: '1. Administrator Portal',
+                accentHex: '#9B8AFB',
+                desc: 'Factory configuration, departments, user provisioning, role assignments, worker & machine registries, and system audit logs.',
+                link: '/login?role=ADMIN',
+              },
+              {
+                role: 'MANAGER',
+                title: '2. Factory Manager Portal',
+                accentHex: '#FF6B35',
+                desc: 'Disruption Command Center, production monitoring, Recovery Engine, plan comparisons, safety & maintenance dispatch.',
+                link: '/login?role=MANAGER',
+              },
+              {
+                role: 'WORKER',
+                title: '3. Floor Worker Portal',
+                accentHex: '#B6D957',
+                desc: 'Personal attendance, assigned shift, task execution progress, machine SOP instructions, fault & hazard reporting.',
+                link: '/login?role=WORKER',
+              },
+              {
+                role: 'TECHNICIAN',
+                title: '4. Maintenance Technician Portal',
+                accentHex: '#C2410C',
+                desc: 'Assigned maintenance requests, fault diagnostics, downtime logging, spare parts reports, and manager verification requests.',
+                link: '/login?role=TECHNICIAN',
+              },
+            ].map((p) => (
+              <div
+                key={p.role}
+                className="bg-[#1C212B] border border-neutral-800 rounded-xl p-6 flex flex-col justify-between hover:border-neutral-600 transition-colors"
+              >
+                <div>
+                  <span
+                    className="text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase tracking-wider"
+                    style={{ backgroundColor: `${p.accentHex}20`, color: p.accentHex }}
+                  >
+                    {p.role} PORTAL
+                  </span>
+                  <h3 className="text-base font-bold text-white mt-3">{p.title}</h3>
+                  <p className="text-xs text-neutral-300 mt-2.5 leading-relaxed">{p.desc}</p>
+                </div>
+                <button
+                  onClick={() => navigate(p.link)}
+                  style={{ backgroundColor: p.accentHex }}
+                  className="mt-6 w-full py-2.5 px-4 text-xs font-bold text-[#111827] rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
+                >
+                  <span>Sign In as {p.role}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CONTACT & 4.9 FINAL CTA */}
       <section id="contact" className="py-16 lg:py-20 border-b border-neutral-800 bg-[#14171D]">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
