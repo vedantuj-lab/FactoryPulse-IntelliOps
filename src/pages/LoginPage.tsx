@@ -95,7 +95,7 @@ export const LoginPage: React.FC = () => {
         rememberMe,
       });
       notify('success', `Signed in as ${res.user.fullName}`, `Role portal: ${res.user.role}`);
-      navigate(res.redirectTo, { replace: true });
+      window.location.href = res.redirectTo;
     } catch (err: any) {
       setErrorMsg(err.message || 'Login failed.');
     } finally {
@@ -156,7 +156,7 @@ export const LoginPage: React.FC = () => {
         rememberMe,
       });
       notify('success', `Welcome back, ${res.user.fullName}`, `Verified role: ${res.user.role}`);
-      navigate(res.redirectTo, { replace: true });
+      window.location.href = res.redirectTo;
     } catch (err: any) {
       setErrorMsg(err.message || 'Authentication failed. Check your credentials and assigned role.');
     } finally {
