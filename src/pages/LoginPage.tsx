@@ -1,36 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, ShieldCheck, AlertCircle, ArrowLeft, LogOut } from 'lucide-react';
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  ShieldCheck,
+  AlertCircle,
+  ArrowLeft,
+  LogOut,
+  LayoutDashboard,
+  Wrench,
+  ClipboardCheck,
+  Sliders,
+} from 'lucide-react';
 import { FactoryPulseLogo, ResilientImage } from '../components/BrandLogo';
 import { INDUSTRIAL_ASSETS } from '../lib/assets';
 import { useAuth, UserRole, getRoleDashboardPath } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { apiFetch } from '../lib/api';
 
-const ROLE_OPTIONS: { role: UserRole; label: string; demoEmail: string; desc: string }[] = [
+const ROLE_OPTIONS: { role: UserRole; label: string; demoEmail: string; desc: string; accentHex: string; icon: any }[] = [
   {
     role: 'ADMIN',
-    label: 'Administrator',
+    label: '1. Administrator',
     demoEmail: 'admin@factorypulse.demo',
     desc: 'Factory configuration, users, departments & audit logs',
+    accentHex: '#9B8AFB',
+    icon: Sliders,
   },
   {
     role: 'MANAGER',
-    label: 'Factory Manager',
+    label: '2. Factory Manager',
     demoEmail: 'manager@factorypulse.demo',
     desc: 'Operations, shifts, production, recovery & simulator',
+    accentHex: '#FF6B35',
+    icon: LayoutDashboard,
   },
   {
     role: 'WORKER',
-    label: 'Worker',
+    label: '3. Worker',
     demoEmail: 'worker@factorypulse.demo',
     desc: 'Attendance, shifts, assigned tasks & fault/safety reports',
+    accentHex: '#B6D957',
+    icon: ClipboardCheck,
   },
   {
     role: 'TECHNICIAN',
-    label: 'Technician',
+    label: '4. Maintenance Technician',
     demoEmail: 'technician@factorypulse.demo',
     desc: 'Assigned faults, diagnostics, repairs & service history',
+    accentHex: '#C2410C',
+    icon: Wrench,
   },
 ];
 
@@ -39,8 +60,8 @@ export const LoginPage: React.FC = () => {
   const { user, login, logout } = useAuth();
   const { notify } = useToast();
 
-  const [selectedRole, setSelectedRole] = useState<UserRole>('MANAGER');
-  const [email, setEmail] = useState('manager@factorypulse.demo');
+  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [demoHintPassword, setDemoHintPassword] = useState('DemoPulse!2026');
   const [showPassword, setShowPassword] = useState(false);
@@ -107,7 +128,7 @@ export const LoginPage: React.FC = () => {
     setSubmitting(true);
     setErrorMsg(null);
     try {
-      const targetRole = roleOverride || selectedRole;
+      const targetRole: UserRole = (roleOverride || selectedRole || 'WORKER');
       const googleEmails: Record<UserRole, string> = {
         ADMIN: 'admin.google@factorypulse.demo',
         MANAGER: 'manager.google@factorypulse.demo',
@@ -152,7 +173,7 @@ export const LoginPage: React.FC = () => {
       const res = await login({
         email: email.trim(),
         password,
-        selectedRole,
+        selectedRole: selectedRole || undefined,
         rememberMe,
       });
       notify('success', `Welcome back, ${res.user.fullName}`, `Verified role: ${res.user.role}`);
@@ -273,28 +294,48 @@ export const LoginPage: React.FC = () => {
 
           {/* Role Verification Selector */}
           <div className="mt-6">
-            <label className="block text-xs font-medium text-neutral-300 mb-2">
-              1. Operational Role (Verified on Backend)
+            <label className="block text-xs font-medium text-neutral-300 mb-2.5">
+              1. Select Your Operational Role (Required before sign-in)
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {ROLE_OPTIONS.map((opt) => {
                 const active = selectedRole === opt.role;
+                const Icon = opt.icon;
                 return (
                   <button
                     key={opt.role}
                     type="button"
                     onClick={() => {
                       setSelectedRole(opt.role);
+                      setEmail(opt.demoEmail);
+                      setPassword(demoHintPassword);
                       setErrorMsg(null);
                     }}
-                    className={`text-left p-2.5 rounded-md border transition-colors ${
+                    style={{
+                      borderColor: active ? opt.accentHex : undefined,
+                      boxShadow: active ? `0 0 12px ${opt.accentHex}40` : undefined,
+                    }}
+                    className={`text-left p-3 rounded-lg border transition-all flex items-start gap-2.5 ${
                       active
-                        ? 'bg-[#242A33] border-[#FF8A32] text-[#F5F6F8]'
-                        : 'bg-[#171A21] border-neutral-800 text-neutral-400 hover:text-neutral-200'
+                        ? 'bg-[#242A33] text-[#F5F6F8]'
+                        : 'bg-[#171A21] border-neutral-800 text-neutral-400 hover:text-neutral-200 hover:border-neutral-700'
                     }`}
                   >
-                    <p className="text-xs font-semibold whitespace-nowrap">{opt.label}</p>
-                    <p className="text-[11px] text-neutral-400 truncate mt-0.5">{opt.desc}</p>
+                    <div
+                      className="p-1.5 rounded shrink-0 mt-0.5"
+                      style={{
+                        backgroundColor: `${opt.accentHex}20`,
+                        color: opt.accentHex,
+                      }}
+                    >
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold truncate" style={{ color: active ? opt.accentHex : '#F5F6F8' }}>
+                        {opt.label}
+                      </p>
+                      <p className="text-[11px] text-neutral-400 leading-tight mt-1 line-clamp-2">{opt.desc}</p>
+                    </div>
                   </button>
                 );
               })}
@@ -310,52 +351,60 @@ export const LoginPage: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="mt-5 space-y-4">
             <div>
-              <label className="block text-xs font-medium text-neutral-300 mb-1">Work Email</label>
+              <label className="block text-xs font-medium text-neutral-300 mb-1">
+                2. Authenticated Work Email {selectedRole ? `(${selectedRole})` : ''}
+              </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-neutral-500 absolute left-3 top-2.5" />
                 <input
                   type="email"
                   required
+                  disabled={!selectedRole}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@factorypulse.demo"
-                  className="w-full pl-9 pr-3 py-2 bg-[#171A21] border border-neutral-700 rounded-md text-sm text-white focus:outline-none focus:border-[#FF8A32]"
+                  placeholder={selectedRole ? 'Enter work email' : 'Select a role above first'}
+                  className="w-full pl-9 pr-3 py-2 bg-[#171A21] border border-neutral-700 rounded-md text-sm text-white focus:outline-none focus:border-[#FF8A32] disabled:opacity-40 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-medium text-neutral-300">Password</label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setResetEmail(email);
-                    setResetOpen(true);
-                  }}
-                  className="text-xs text-[#19C6B4] hover:underline"
-                >
-                  Forgot password?
-                </button>
+                <label className="text-xs font-medium text-neutral-300">3. Password</label>
+                {selectedRole && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setResetEmail(email);
+                      setResetOpen(true);
+                    }}
+                    className="text-xs text-[#19C6B4] hover:underline"
+                  >
+                    Forgot password?
+                  </button>
+                )}
               </div>
               <div className="relative">
                 <Lock className="w-4 h-4 text-neutral-500 absolute left-3 top-2.5" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
+                  disabled={!selectedRole}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full pl-9 pr-10 py-2 bg-[#171A21] border border-neutral-700 rounded-md text-sm text-white focus:outline-none focus:border-[#FF8A32]"
+                  placeholder={selectedRole ? 'Enter password' : 'Select a role above first'}
+                  className="w-full pl-9 pr-10 py-2 bg-[#171A21] border border-neutral-700 rounded-md text-sm text-white focus:outline-none focus:border-[#FF8A32] disabled:opacity-40 disabled:cursor-not-allowed"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((s) => !s)}
-                  className="absolute right-2.5 top-2 text-neutral-400 hover:text-white p-0.5"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                {selectedRole && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((s) => !s)}
+                    className="absolute right-2.5 top-2 text-neutral-400 hover:text-white p-0.5"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                )}
               </div>
             </div>
 
@@ -363,6 +412,7 @@ export const LoginPage: React.FC = () => {
               <label className="inline-flex items-center gap-2 text-neutral-300 cursor-pointer">
                 <input
                   type="checkbox"
+                  disabled={!selectedRole}
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                   className="rounded border-neutral-600 bg-[#171A21]"
@@ -373,23 +423,27 @@ export const LoginPage: React.FC = () => {
 
             <button
               type="submit"
-              disabled={submitting}
-              className="w-full py-2.5 px-4 text-sm font-semibold bg-[#FF8A32] text-[#171A21] rounded-md hover:bg-[#ff9b4f] transition-colors disabled:opacity-60"
+              disabled={!selectedRole || submitting}
+              className="w-full py-2.5 px-4 text-sm font-semibold bg-[#FF6B35] text-white rounded-md hover:bg-[#ea580c] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow"
             >
-              {submitting ? 'Verifying Role & Credentials...' : 'Sign In to Portal'}
+              {!selectedRole
+                ? 'Select a Role Option Above to Sign In'
+                : submitting
+                ? 'Verifying Role & Credentials...'
+                : `Sign In to ${selectedRole} Portal`}
             </button>
 
             <div className="relative my-4 flex items-center justify-center">
               <div className="border-t border-neutral-800 w-full" />
-              <span className="bg-[#1B1F27] px-3 text-[11px] text-neutral-400 font-mono uppercase">Or OAuth</span>
+              <span className="bg-[#1B1F27] px-3 text-[11px] text-neutral-400 font-mono uppercase">Or Google OAuth</span>
               <div className="border-t border-neutral-800 w-full" />
             </div>
 
             <button
               type="button"
-              onClick={() => handleGoogleLogin()}
-              disabled={submitting}
-              className="w-full py-2.5 px-4 text-xs font-semibold bg-[#171A21] border border-neutral-700 text-white rounded-md hover:bg-[#242A33] transition-colors flex items-center justify-center gap-2"
+              onClick={() => selectedRole && handleGoogleLogin(selectedRole)}
+              disabled={!selectedRole || submitting}
+              className="w-full py-2.5 px-4 text-xs font-semibold bg-[#171A21] border border-neutral-700 text-white rounded-md hover:bg-[#242A33] transition-colors flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path
